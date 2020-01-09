@@ -2,36 +2,32 @@
 import axios from 'axios';
 //用户登录
 export function login(data) {
-  const res = axios.post('/api/user/login', data);
-  return new Promise((resolve, reject) => {
+  const params = new URLSearchParams();
+  params.append('userid', data.userid);
+  params.append('pwd', data.pwd);
+  const res=axios.post('/api/user/login', params) ;
+  return new Promise((resolve,reject)=>{
     res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
+      .then(res => {
+        resolve(res.data);
       })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve(json.data);
-        } else {
-          reject(json.message);
-        }
+      .catch(err => {
+        reject(err.data)
       })
-      .catch((e) => {
-        reject(e.toString())
-      })
-  })
+  });
 }
 /**
  * post方法，对应post请求
  * @param {String} url [请求的url地址]
  * @param {Object} params [请求时携带的参数]
  */
-export function post(url, params) {
-  return new Promise((resolve, reject) => {
-    axios.post(url, QS.stringify(params))
+export function post( data) {
+  var params = new URLSearchParams();
+  params.append('userid', data.userid);
+  params.append('pwd', data.pwd);
+  const res=axios.post('/api/user/login', params) ;
+  return new Promise((resolve,reject)=>{
+    res
       .then(res => {
         resolve(res.data);
       })
@@ -52,19 +48,13 @@ export function signup(data) {
   const res=axios.post('/api/user/signup', params) ;
   return new Promise((resolve,reject)=>{
     res
-    .then((result)=>{
-      alert(result.status);
-          if(result.status===200){
-            alert('返回结果');
-            return result.data;
-          }else{
-            reject(result.status)
-          }
+    .then(res => {
+      resolve(res.data);
+    })
+      .catch(err => {
+        reject(err.data)
       })
-      .catch((e)=>{
-        reject(e.toString())
-      })
-  })
+  });
 }
 
 //得到类目

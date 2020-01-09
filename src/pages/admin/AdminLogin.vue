@@ -30,12 +30,9 @@ export default {
     }
   },
   methods:{
-    ...mapMutations({
-      setAdminName: 'SET_ADMIN_NAME',
-      setAdminToken: 'SET_ADMIN_TOKEN'
-    }),
     login(){
-      const account = this.$refs.account.value;
+      this.$router.push('/backstage');
+     /* const account = this.$refs.account.value;
       const pwd = this.$refs.pwd.value;
       const res = login({
         account:account,
@@ -43,13 +40,12 @@ export default {
       });
       res
       .then((data)=>{
-        this.setAdminName(data.name);
-        this.setAdminToken(data.token);
+
         this.$router.push('/backstage');
       })
       .catch((e)=>{
         alert('登录失败')
-      })
+      })*/
     }
   }
 }

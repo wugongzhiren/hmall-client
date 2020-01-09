@@ -7,8 +7,8 @@
         <span @click="setIndex(1)" :class="{selected:curIndex===1}">注册</span>
       </div>
       <div class="formBox" v-show="curIndex===0">
-        <input ref="account" type="text" placeholder="账号" />
-        <input ref="pwd" type="password" placeholder="密码" />
+        <input v-model="userid" type="text" placeholder="账号" />
+        <input v-model="signPwd" type="password" placeholder="密码" />
         <button @click="login">登录</button>
       </div>
       <div class="formBox" v-show="curIndex===1">
@@ -40,17 +40,17 @@ export default {
   data () {
     return {
       curIndex:0,
-      userid:"18168875570",
+      userid:"",
       signPwd:"",
       signName:"",
       signAddress:""
     }
   },
   methods:{
-    ...mapMutations({
+   /* ...mapMutations({
       setClientName: 'SET_CLIENT_NAME',
       setClientToken: 'SET_CLIENT_TOKEN'
-    }),
+    }),*/
     setIndex(index){
       if(index===this.curIndex){
         return;
@@ -58,17 +58,18 @@ export default {
       this.curIndex = index;
     },
     login(){
-      const account = this.$refs.account.value;
-      const pwd = this.$refs.pwd.value;
       const res = login({
-        account:account,
-        pwd:pwd
+        userid:this.userid,
+        pwd:this.signPwd
       });
       res
       .then((data)=>{
-        this.setClientName(data.name);
-        this.setClientToken(data.token);
-        this.$router.push('/');
+        if(data.code==200){
+          this.$router.push('/');
+        }else{
+          alert("账号或者密码错误，请重试")
+        }
+
       })
       .catch((e)=>{
         alert(e)
@@ -83,7 +84,12 @@ export default {
       });
       res
       .then((data)=>{
-
+        if(data.code==201){
+          alert("该用户已经被注册!");
+        }else{
+          this.curIndex=0;
+          alert("注册成功，欢迎登陆!");
+        }
        /* this.setClientName(data.name);
         this.setClientToken(data.token);
         this.$router.push('/');*/

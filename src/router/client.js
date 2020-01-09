@@ -14,7 +14,15 @@ import MyOrder from '@/pages/client/MyOrder';
 import MyData from '@/pages/client/MyData';
 import Cart from '@/pages/client/Cart';
 import ErrorPage from '@/pages/ErrorPage';
-
+import AdminLogin from '@/pages/admin/AdminLogin';
+import Backstage from '@/pages/admin/Backstage'
+import EditUser from '@/pages/admin/EditUser'
+import EditAdmin from '@/pages/admin/EditAdmin'
+import Goods from '@/pages/admin/Goods'
+import Orders from '@/pages/admin/Orders'
+import EditOrders from '@/pages/admin/EditOrders'
+import EditGoods from '@/pages/admin/EditGoods'
+import Messages from '@/pages/admin/Messages'
 Vue.use(Router);
 
 let router = new Router({
@@ -26,6 +34,10 @@ let router = new Router({
       path: '/login',
       name: 'MallLogin',
       component: MallLogin
+    },{
+      path: '/AdminLogin',
+      name: 'AdminLogin',
+      component: AdminLogin
     },{
       path: '/mall',
       name: 'Mall',
@@ -84,6 +96,63 @@ let router = new Router({
         }
       ]
     },{
+      path: '/backstage',
+      name: 'Backstage',
+      redirect:"/backstage/editUser",
+      component: Backstage,
+      children: [
+        {
+          path: 'editUser',
+          name: 'EditUser',
+          component: EditUser,
+          meta: {
+            requireLogin:true,
+          },
+        },{
+          path: 'editAdmin',
+          name: 'EditAdmin',
+          component: EditAdmin,
+          meta: {
+            requireLogin:true,
+          },
+        },{
+          path: 'goods',
+          name: 'Goods',
+          component: Goods,
+          meta: {
+            requireLogin:true,
+          },
+        },{
+          path: 'goods/:id',
+          name: 'EditGoods',
+          component: EditGoods,
+          meta: {
+            requireLogin:true,
+          },
+        },{
+          path: 'orders',
+          name: 'Orders',
+          component: Orders,
+          meta: {
+            requireLogin:true,
+          },
+        },{
+          path: 'orders/:id',
+          name: 'EditOrders',
+          component: EditOrders,
+          meta: {
+            requireLogin:true,
+          },
+        },{
+          path: 'messages',
+          name: 'Messages',
+          component: Messages,
+          meta: {
+            requireLogin:true,
+          },
+        }
+      ]
+    },{
   	  path:'*',
   	  name:'ErrorPage',
   	  component: ErrorPage
@@ -99,7 +168,7 @@ let router = new Router({
 });
 
 //登录拦截
-router.beforeEach((to,from,next) => {
+/*router.beforeEach((to,from,next) => {
   if(to.meta.requireLogin){
     if(store.state.clientToken){
       next()
@@ -112,6 +181,6 @@ router.beforeEach((to,from,next) => {
   }else{
     next();
   }
-});
+});*/
 
 export default router;

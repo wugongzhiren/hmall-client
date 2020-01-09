@@ -301,226 +301,87 @@ export function deleteOrder(id){
 }
 
 //得到商品
-export function getGoods(id){
-	const res = axios.get('/api/admin/getGoodsByType?typeId='+id);
-	return new Promise((resolve,reject)=>{
-		res
-		.then((result)=>{
-	        if(result.status===200){
-	        	return result.data;
-	        }else{
-	        	reject(result.status)
-	        }
-	    })
-	    .then((json)=>{
-    		if(json.code===0){
-                resolve(json.data);
-            }else{
-                reject(json.message);
-            }
-    	})
-	    .catch((e)=>{
-	    	reject(e.toString())
-	    })
-	})
-}
-
-//得到类目
-export function getTypes(){
-	const res = axios.get('/api/admin/getType');
-	return new Promise((resolve,reject)=>{
-		res
-		.then((result)=>{
-	        if(result.status===200){
-	        	return result.data;
-	        }else{
-	        	reject(result.status)
-	        }
-	    })
-	    .then((json)=>{
-    		if(json.code===0){
-                resolve(json.data);
-            }else{
-                reject(json.message);
-            }
-    	})
-	    .catch((e)=>{
-	    	reject(e.toString())
-	    })
-	})
-}
-
-//增加类目
-export function addType(data){
-	const res = axios.post('/api/admin/addType',data);
-	return new Promise((resolve,reject)=>{
-		res
-		.then((result)=>{
-	        if(result.status===200){
-	        	return result.data;
-	        }else{
-	        	reject(result.status)
-	        }
-	    })
-	    .then((json)=>{
-    		if(json.code===0){
-                resolve();
-            }else{
-                reject(json.message);
-            }
-    	})
-	    .catch((e)=>{
-	    	reject(e.toString())
-	    })
-	})
+export function getGoods(){
+	const res = axios.get('/api/goods/getAll');
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
 }
 
 //得到商品信息
 export function getGoodsInfo(id){
-	const res = axios.get('/api/admin/getGoodsInfo?id='+id);
-	return new Promise((resolve,reject)=>{
-		res
-		.then((result)=>{
-	        if(result.status===200){
-	        	return result.data;
-	        }else{
-	        	reject(result.status)
-	        }
-	    })
-	    .then((json)=>{
-    		if(json.code===0){
-                resolve(json.data);
-            }else{
-                reject(json.message);
-            }
-    	})
-	    .catch((e)=>{
-	    	reject(e.toString())
-	    })
-	})
+	const res = axios.get('/api/goods/getOne?id='+id);
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
 }
 
 //增加商品
 export function addGoods(data){
-	const res = axios.post('/api/admin/addGoods',data);
-	return new Promise((resolve,reject)=>{
-		res
-		.then((result)=>{
-	        if(result.status===200){
-	        	return result.data;
-	        }else{
-	        	reject(result.status)
-	        }
-	    })
-	    .then((json)=>{
-    		if(json.code===0){
-                resolve();
-            }else{
-                reject(json.message);
-            }
-    	})
-	    .catch((e)=>{
-	    	reject(e.toString())
-	    })
-	})
-}
-
-//增加规格
-export function addSpec(data){
-	const res = axios.post('/api/admin/addSpec',data);
-	return new Promise((resolve,reject)=>{
-		res
-		.then((result)=>{
-	        if(result.status===200){
-	        	return result.data;
-	        }else{
-	        	reject(result.status)
-	        }
-	    })
-	    .then((json)=>{
-    		if(json.code===0){
-                resolve(json.data);
-            }else{
-                reject(json.message);
-            }
-    	})
-	    .catch((e)=>{
-	    	reject(e.toString())
-	    })
-	})
-}
-
-//删除规格
-export function deleteSpec(data){
-	const res = axios.post('/api/admin/deleteSpec',data);
-	return new Promise((resolve,reject)=>{
-		res
-		.then((result)=>{
-	        if(result.status===200){
-	        	return result.data;
-	        }else{
-	        	reject(result.status)
-	        }
-	    })
-	    .then((json)=>{
-    		if(json.code===0){
-                resolve();
-            }else{
-                reject(json.message);
-            }
-    	})
-	    .catch((e)=>{
-	    	reject(e.toString())
-	    })
-	})
+  const params = new URLSearchParams();
+  params.append('name', data.name);
+  params.append('type', data.type);
+  params.append('img', data.img);
+  params.append('description', data.description);
+  params.append('stockNum', data.stockNum);
+  params.append('unitPrice', data.unitPrice);
+  const res=axios.post('/api/goods/add', params) ;
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
 }
 
 //更新商品信息
 export function updateGoods(data){
-	const res = axios.post('/api/admin/updateGoods',data);
-	return new Promise((resolve,reject)=>{
-		res
-		.then((result)=>{
-	        if(result.status===200){
-	        	return result.data;
-	        }else{
-	        	reject(result.status)
-	        }
-	    })
-	    .then((json)=>{
-    		if(json.code===0){
-                resolve();
-            }else{
-                reject(json.message);
-            }
-    	})
-	    .catch((e)=>{
-	    	reject(e.toString())
-	    })
-	})
+  const params = new URLSearchParams();
+  alert(data.id);
+  params.append('id', data.id);
+  params.append('name', data.name);
+  params.append('type', data.type);
+  params.append('img', data.img);
+  params.append('description', data.description);
+  params.append('stockNum', data.stockNum);
+  params.append('unitPrice', data.unitPrice);
+	const res = axios.post('/api/goods/update',params);
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
 }
 
 //删除指定商品
 export function deleteGoods(id){
-	const res = axios.delete('/api/admin/deleteGoods?id='+id);
-	return new Promise((resolve,reject)=>{
-		res
-		.then((result)=>{
-	        if(result.status===200){
-	        	return result.data;
-	        }else{
-	        	reject(result.status)
-	        }
-	    })
-	    .then((json)=>{
-    		if(json.code===0){
-                resolve();
-            }else{
-                reject(json.message);
-            }
-    	})
-	    .catch((e)=>{
-	    	reject(e.toString())
-	    })
-	})
+	const res = axios.delete('/api/goods/delete?id='+id);
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
 }

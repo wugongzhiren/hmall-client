@@ -2,14 +2,13 @@
   <div class="Goods">
     <header class="clear">
   		<span>商品管理</span>
-  		<button @click="addType">添加类目</button>
   	</header>
-  	<Tag :tagList="tagTextList" @indexChange="changeTag"/>
+  	<!--<Tag :tagList="tagTextList" @indexChange="changeTag"/>-->
   	<div class="content">
   		<ul class="clear">
   			<li v-for="(item,index) in goodsList" :key="'goods'+item.id">
-  				<img :src="item.img" alt="" />
-  				<span>{{item.name}}</span>
+  				<img :src="item.imgurl" alt="" />
+  				<span>{{item.goodsname}}</span>
   				<div>
   					<button class="normalBtn" @click="navTo('/backstage/goods/'+item.id)">编辑</button>
   					<button @click="deleteGoods(item.id)" class="deleteBtn">删除</button>
@@ -23,24 +22,16 @@
   			</li>
   		</ul>
   	</div>
-  	<Popup title="增加类目" @popupClose="closePopup" v-show="popupShow">
-  		<div class="popupContent" slot="popupContent">
-  			<input type="text" ref="typeInput" placeholder="请输入类目名称" />
-  			<button @click="addConfirm">确认</button>
-  		</div>
-  	</Popup>
   </div>
 </template>
 
 <script>
 import {getGoods,getTypes,addType,deleteGoods} from '../../api/admin';
 import Tag from '../../components/Tag';
-import Popup from '../../components/Popup';
 export default {
   name: 'Goods',
   components:{
   	Tag,
-  	Popup
   },
   computed:{
   	tagTextList(){
@@ -56,52 +47,20 @@ export default {
   		tags:[],
   		goodsList:[],
   		popupShow:false,
-  		curIndex:0
   	}
   },
   methods:{
-  	changeTag(index){
-  		this.curIndex = index;
-  		const res = getGoods(this.tags[index].id);
-  		res
-  		.then((goods)=>{
-  			this.goodsList = goods;
-  		})
-  		.catch((e)=>{
-  			alert(e);
-  		})
-  	},
-  	getTypes(){
-  		const res = getTypes();
-  		res.then((data)=>{
-  			this.tags = data;
-  			this.changeTag(this.curIndex);
-  		})
-  		.catch((e)=>{
-  			alert(e);
-  		})
-  	},
-  	addType(){
-  		this.popupShow = true;
-  	},
-  	closePopup(){
-  		this.popupShow = false;
-  	},
-  	addConfirm(){
-  		const val = this.$refs.typeInput.value;
-  		const res = addType({
-  			name:val
-  		});
-  		res
-  		.then(()=>{
-  			alert('添加成功!');
-  			this.getTypes();
-  			this.closePopup();
-  		})
-  		.catch((e)=>{
-  			alert(e);
-  		})
-  	},
+
+    getGoods(){
+      const res = getGoods();
+      res
+        .then((goods)=>{
+          this.goodsList = goods.t;
+        })
+        .catch((e)=>{
+          alert(e);
+        })
+    },
   	navTo(route){
   		this.$router.push(route);
   	},
@@ -121,7 +80,7 @@ export default {
     },
   },
   mounted(){
-  	this.getTypes();
+  	this.getGoods();
   }
 }
 </script>

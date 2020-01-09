@@ -1,7 +1,7 @@
 <template>
   <div class="Backstage" :style="{width:width+'px',height:height+'px'}">
     <div class="bsLeft">
-      <div class="logo">More Mall</div>
+      <div class="logo">XXXの蛋糕店</div>
       <ul :style="{height:(height-70)+'px'}">
         <li @click="navTo('/backstage/editUser')" :class="{selected:curPath==='/backstage/editUser'}">用户管理</li>
         <li @click="navTo('/backstage/goods')" :class="{selected:curPath==='/backstage/goods'}">商品管理</li>
@@ -164,6 +164,6 @@ export default {
         }
       }
     }
-  } 
+  }
 }
 </style>
