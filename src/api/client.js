@@ -84,6 +84,9 @@ export function getTypes() {
 
 //获得不同类目的商品
 export function getGoodsList(typeId) {
+  if(typeId==='0'){
+    //获取所有的
+  }
   const res = axios.get('/api/mall/getGoodsByType?typeId=' + typeId);
   return new Promise((resolve, reject) => {
     res
@@ -109,27 +112,16 @@ export function getGoodsList(typeId) {
 
 //获得商品详情页信息
 export function getGoodsInfo(id) {
-  const res = axios.get('/api/mall/getGoodsInfo?id=' + id);
-  return new Promise((resolve, reject) => {
+  const res = axios.get('/api/goods/getOne?id=' + id);
+  return new Promise((resolve,reject)=>{
     res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
+      .then(res => {
+        resolve(res.data);
       })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve(json.data);
-        } else {
-          reject(json.message);
-        }
+      .catch(err => {
+        reject(err.data)
       })
-      .catch((e) => {
-        reject(e.toString())
-      })
-  })
+  });
 }
 
 //获得商品详情页问答区数据

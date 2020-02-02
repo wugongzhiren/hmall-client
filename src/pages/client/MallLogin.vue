@@ -47,10 +47,10 @@ export default {
     }
   },
   methods:{
-   /* ...mapMutations({
-      setClientName: 'SET_CLIENT_NAME',
+    ...mapMutations({
+     // setClientName: 'SET_CLIENT_NAME',
       setClientToken: 'SET_CLIENT_TOKEN'
-    }),*/
+    }),
     setIndex(index){
       if(index===this.curIndex){
         return;
@@ -65,6 +65,7 @@ export default {
       res
       .then((data)=>{
         if(data.code==200){
+          this.setClientToken(data.t.username);
           this.$router.push('/');
         }else{
           alert("账号或者密码错误，请重试")
@@ -90,9 +91,8 @@ export default {
           this.curIndex=0;
           alert("注册成功，欢迎登陆!");
         }
-       /* this.setClientName(data.name);
-        this.setClientToken(data.token);
-        this.$router.push('/');*/
+        this.setClientToken(data.t.username);
+        this.$router.push('/');
       })
       .catch((e)=>{
         alert('出错了')

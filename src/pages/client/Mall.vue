@@ -2,7 +2,7 @@
   <div class="Mall">
     <header>
       <div class="container clear">
-        <span class="title" @click="navTo('/mall')">MoreMall 一站式选购平台</span>
+        <span class="title" @click="navTo('/mall')">XXの蛋糕店一站式选购平台</span>
         <NoticeList :notices="notices"/>
         <div class="right" v-if="clientToken">
           <span class="name">欢迎您，{{clientName}}</span>
@@ -20,7 +20,7 @@
         <router-view></router-view>
       </div>
       <div class="fixedAd">
-        <img src="../../assets/img/index2.gif" alt="" />
+       <!-- <img src="../../assets/img/index2.gif" alt="" />-->
         <ul class="fixedList">
           <li>
             <i class="iconfont icon-collection_fill" />
@@ -49,8 +49,8 @@
           <span><i class="iconfont icon-fabulous" />用户反馈</span>
         </div>
         <div class="intro footerItem">
-          <p class="title">何为MoreMall</p>
-          <p class="intro-p">MoreMall原创生活类电商品牌，秉承网易一贯的严谨态度，我们深入世界各地，从源头全程严格把控商品生产环节，力求帮消费者甄选到优质的商品</p>
+          <p class="title">xxxの蛋糕店</p>
+          <p class="intro-p">全国连锁，做全国消费者最喜爱的蛋糕，全国36仓急速发货，新鲜快速</p>
           <div>
             关注我们：
             <img src="http://yanxuan.nosdn.127.net/60068701f3a380911f237c26c91b39d0.png" alt=""/>
@@ -59,9 +59,9 @@
           </div>
         </div>
         <div class="code footerItem">
-          <p class="title">扫码下载APP</p>
+          <p class="title">下载APP随心购</p>
           <img src="../../assets/img/code.png" alt=""/>
-          <span>下载领1000元新人礼包</span>
+          <span>下载领100元新人礼包</span>
         </div>
       </div>
     </div>
@@ -70,7 +70,7 @@
         <ul class="footerTop">
           <li>
             <img src="//yanxuan.nosdn.127.net/e6021a6fcd3ba0af3a10243b7a2fda0d.png" alt="" />
-            <span>30天无忧退换货</span>
+            <span>贴心积分打折</span>
           </li>
           <li>
             <img src="//yanxuan.nosdn.127.net/e09c44e4369232c7dd2f6495450439f1.png" alt="" />
@@ -78,7 +78,7 @@
           </li>
           <li>
             <img src="//yanxuan.nosdn.127.net/e72ed4de906bd7ff4fec8fa90f2c63f1.png" alt="" />
-            <span>XX品质保证</span>
+            <span>食品健康品质保证</span>
           </li>
         </ul>
         <div class="footerBottom">
@@ -93,7 +93,7 @@
             <li>搜索推荐</li>
             <li>友情链接</li>
           </ul>
-          <p>XX公司版权所有 © 1996-2018   食品经营许可证：XXXXXXXXXXXXXXXXX</p>
+          <p>XX公司版权所有 © 1996-2020   食品经营许可证：XXXXXXXXXXXXXXXXX</p>
         </div>
       </div>
     </footer>
@@ -118,7 +118,7 @@ export default {
   },
   data () {
     return {
-      notices:['今日疯抢：牛皮防水男靴仅229元！直减2...','【福利】领1000元APP新人礼'],
+      notices:['新年福利，奶油慕斯蛋糕仅119元！直减60元','【福利】领100元APP新人礼'],
       clientHeight:getClientSize().height,
       shouldShowBT:false
     }

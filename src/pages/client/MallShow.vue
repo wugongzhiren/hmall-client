@@ -2,17 +2,17 @@
   <div class="MallShow">
     <FixedNav v-show="navShouldFixed">
       <div slot="navContent" class="container fixedNavContainer">
-        <h3 class="fixedLeft" @click="navTo('/mall/show/index')">MoreMall</h3>
-        <ul class="fixedRight">
-          <li 
-            v-for="(item,index) in typeList" 
-            :key="'type'+item.id" 
+        <h3 class="fixedLeft" @click="navTo('/mall/show/index')">xxxの蛋糕</h3>
+       <!-- <ul class="fixedRight">
+          <li
+            v-for="(item,index) in typeList"
+            :key="'type'+item.id"
             :class="{selected:judgeCurPath(item.id)}"
             @click="selectType(item.id)"
           >
             {{item.name}}
           </li>
-        </ul>
+        </ul>-->
       </div>
     </FixedNav>
     <div class="logo">
@@ -20,8 +20,6 @@
       <div class="searchBox">
         <TipsInput
           placeholder="请输入商品关键字"
-          :tips="tips"
-          @tipsChosen="searchTip"
           ref="TipsInput"
           v-model="searchText"
         />
@@ -29,9 +27,9 @@
       </div>
     </div>
     <ul ref="typeList" class="typeList">
-      <li 
-        v-for="(item,index) in typeList" 
-        :key="'type'+item.id" 
+      <li
+        v-for="(item,index) in typeList"
+        :key="'type'+item.id"
         :class="{selected:judgeCurPath(item.id)}"
         @click="selectType(item.id)"
       >
@@ -43,7 +41,6 @@
 </template>
 
 <script>
-import {getTypes,getGoodsList} from '../../api/client';
 import TipsInput from '../../components/TipsInput';
 import FixedNav from '../../components/FixedNav';
 
@@ -60,9 +57,9 @@ export default {
   },
   data () {
     return {
-      typeList:[],
+      tips:[],
+      typeList:[{"id":"0","name":"首页"},{"id":"1","name":"经典系列"},{"id":"2","name":"儿童系列"},{"id":"3","name":"尊爱系列"},{"id":"4","name":"奶油系列"}],
       searchText:'',
-      tips:['aa','bb','cc'],
       navShouldFixed:false,
     }
   },
@@ -88,6 +85,7 @@ export default {
     },
     selectType(typeId){
       //首页
+      alert(11);
       if(typeId===-1){
         this.navTo('/mall/show/index');
       }else{
@@ -120,20 +118,6 @@ export default {
   },
 
   mounted(){
-    //获取数据
-    const res = getTypes();
-    res
-    .then((data)=>{
-      data.unshift({
-        id:-1,
-        name:'首页'
-      });
-      this.typeList = data;
-    })
-    .catch((e)=>{
-      alert(e);
-    });
-
     //监听滚动事件
     document.addEventListener('scroll',this.scrollHandle,false);
   },

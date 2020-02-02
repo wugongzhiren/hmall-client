@@ -11,13 +11,25 @@
             <p>{{goodsDesc}}</p>
           </div>
           <div class="infoBox">
-            <h3 class="price">{{'¥'+goodsPrice}}</h3>
+            <h3 class="price">{{'¥'+price}}</h3>
           </div>
           <div class="infoBox">
-            <span>规格：</span>
-            <Radio v-for="(item,index) in specs" :key="item.id" v-model="temSpecId" :initVal="specs[0].id" radioName="spec" :radioVal="item.id">
-              <span class="tips" slot="tips">{{item.specName+' 还剩'+item.stockNum+'件'}}</span>
-            </Radio>
+            <span>类型：</span>
+           <!-- <Radio v-for="(item,index) in specs" :key="item.id" v-model="temSpecId" :initVal="specs[0].id" radioName="spec" :radioVal="item.id">
+
+            </Radio>-->
+
+            <span v-if="typeId=='1'" class="tips" slot="tips">经典系列</span>
+            <span v-else-if="typeId=='2'" class="tips" slot="tips">儿童系列</span>
+            <span v-else-if="typeId=='3'" class="tips" slot="tips">尊爱系列</span>
+            <span v-else-if="typeId=='4'" class="tips" slot="tips">奶油系列</span>
+          </div>
+          <div class="infoBox">
+            <span>库存：</span>
+            <!-- <Radio v-for="(item,index) in specs" :key="item.id" v-model="temSpecId" :initVal="specs[0].id" radioName="spec" :radioVal="item.id">
+
+             </Radio>-->
+            <span class="tips" slot="tips">{{'还剩'+stockNum+'件'}}</span>
           </div>
           <div class="infoBox">
             <span>数量：</span>
@@ -33,62 +45,15 @@
             {{item}}
           </li>
         </ul>
-        <div class="commentBody" v-if="curIndex===0">
-          <div v-if="commentList.length>0">
-            <div class="rateBox">
-              <span>好评率</span>
-              <span class="rate">{{rate+'%'}}</span>
-            </div>
-            <ul class="commentList">
-              <li v-for="(item,index) in commentList" :key="'comment'+index">
-                <div class="userInfo">
-                  <img :src="item.user.headimg" />
-                  <span>{{item.user.nickname}}</span>
-                </div>
-                <div class="commentInfo">
-                  <div class="starList">
-                    <i
-                      class="iconfont icon-collection_fill" 
-                      v-for="(star,index) in (item.score/20)" 
-                      :key="item.id+''+index" 
-                    />
-                  </div>
-                  <p class="specName">{{item.specName}}</p>
-                  <p class="comment">{{item.comment}}</p>
-                  <p class="time">{{item.time}}</p>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="noComment" v-else>暂时还没有评论~</div>
-        </div>
-        <div class="msgBody" v-else>
-          <div class="inputBox">
-            <textarea placeholder="请输入提问内容" v-model="askContent" cols="30" rows="10"></textarea>
-            <button v-if="clientToken" @click="postAsk" :class="{ban:askContent.trim().length<=0}">提问</button>
-            <div v-else class="banAsk">请先登录</div>
-          </div>
-          <ul class="msgList">
-            <li v-for="(item,index) in msgList" :key="'msg'+item.id">
-              <div class="ask">
-                <span class="note">问</span>
-                <span class="text">{{item.content}}</span>
-                <span class="tipsInfo">{{item.asker+' '+item.time}}</span>
-              </div>
-              <div class="answer">
-                <span class="note">答</span>
-                <span class="text">{{Object.keys(item.reply).length>0?item.reply.content:'暂时没有回答'}}</span>
-                <span class="tipsInfo">{{Object.keys(item.reply).length>0?item.reply.time:''}}</span>
-              </div>
-            </li>
-          </ul>
+        <div class="commentBody">
+          <div class="noComment" >{{description}}~</div>
         </div>
       </section>
-      <section class="typeGoods rightContainer">
+      <!--<section class="typeGoods rightContainer">
         <div class="title">相似商品</div>
         <ul class="list">
-          <GoodsItem 
-            v-for="(item,index) in filterList" 
+          <GoodsItem
+            v-for="(item,index) in filterList"
             :key="+item.id"
             :id="item.id"
             :img="item.img"
@@ -96,7 +61,7 @@
             :price="item.price"
           />
       </ul>
-      </section>
+      </section>-->
     </div>
   </div>
 </template>
@@ -123,23 +88,23 @@ export default {
     id(){
       return this.$route.params.id;
     },
-    goodsPrice(){
-      let unitPrice = 0; 
+    /*goodsPrice(){
+      let unitPrice = 0;
       this.specs.map((item,index)=>{
         if(item.id===this.temSpecId){
           unitPrice = Number(item.unitPrice);
         }
       })
       return (this.num*unitPrice);
-    },
+    },*/
     temStockNum(){
-      let stockNum = 0; 
+     /* let stockNum = 0;
       this.specs.map((item,index)=>{
         if(item.id===this.temSpecId){
           stockNum = Number(item.stockNum);
         }
-      })
-      return stockNum;
+      })*/
+      return Number(this.stock);
     },
     filterList(){
       return this.goodsList.filter((item)=>{
@@ -152,13 +117,16 @@ export default {
       goodsImg:'',
       goodsName:'',
       goodsDesc:'',
+      price:'',
+      description:'',
+      stock:'',
       specs:[],
       typeId:'',
       temSpecId:0,
       num:1,
       msgList:[],
       askContent:'',
-      tagList:['评价','商品问答'],
+      tagList:['商品描述'],
       curIndex:0,
       rate:'',
       commentList:[],
@@ -175,13 +143,15 @@ export default {
       const res = getGoodsInfo(id);
       res
       .then((data)=>{
-        this.goodsImg = data.img;
-        this.goodsName = data.name;
-        this.goodsDesc = data.desc;
-        this.specs = data.specs;
-        this.typeId = data.typeId;
-        this.temSpecId = data.specs[0].id;
-        this.getTypeGoodsList(data.typeId);
+        this.goodsImg = data.t.imgurl;
+        this.goodsName = data.t.goodsname;
+        this.goodsDesc = data.t.description;
+        //this.specs = data.specs;
+        this.typeId = data.t.type;
+this.stockNum=data.t.stock;
+        this.price=data.t.price;
+        this.description=data.t.description;
+        //this.getTypeGoodsList(data.typeId);
       })
       .catch((e)=>{
         alert(e);
@@ -198,34 +168,6 @@ export default {
         alert(e);
       })
     },
-
-    postAsk(){
-      if(this.askContent.trim().length<=0){
-        return;
-      }
-      const res = askGoodsMsg({
-        token:this.clientToken,
-        msg:this.askContent,
-        goodsId:this.id,
-      });
-      res
-      .then(()=>{
-        let time = new Date();
-        this.msgList.unshift({
-          id:'new',
-          content:this.askContent,
-          state:0,
-          asker:this.clientName,
-          time:time.getMonth()+1+'-'+time.getDate(),
-          reply:{}
-        });
-        this.askContent = '';
-      })
-      .catch((e)=>{
-        alert(e);
-      })
-    },
-
     addToCart(){
       if(!this.clientToken){
         alert('请先登录！');
@@ -298,8 +240,8 @@ export default {
   },
   mounted(){
     this.getGoodsInfo(this.id);
-    this.getGoodsMsg(this.id);
-    this.getComment(this.id);
+    //this.getGoodsMsg(this.id);
+    //this.getComment(this.id);
   },
 
   watch:{

@@ -1,20 +1,48 @@
 <template>
   <div class="MallIndex">
-    <FadeSwiper class="swiperBox" :width="clientWidth" height="420px">
-      <img class="banner" slot="item1" src="../../assets/img/banner1.jpg" />
-      <img class="banner" slot="item2" src="../../assets/img/banner2.jpg" />
-      <img class="banner" slot="item3" src="../../assets/img/banner3.jpg" />
+    <el-row>
+    <FadeSwiper class="swiperBox" height="420px">
+      <img class="banner" slot="item1" src="http://www.holiland.com/data/afficheimg/1451241729614010049.jpg" />
+      <img class="banner" slot="item2" src="http://www.holiland.com/data/afficheimg/1456986961694221493.jpg" />
+      <img class="banner" slot="item3" src="http://www.holiland.com/data/afficheimg/1464247474728938268.jpg" />
     </FadeSwiper>
-    <section class="newGoods section">
+    </el-row>
+    <el-row>
+    <section class="hotGoods section">
+      <SectionHeader title="人气推荐" tips="最火最潮商品，为您挑选" moreText="更多推荐>"/>
+      <div class="content">
+        <ul class="left">
+          <GoodsItem
+            :id="goodsList[0].id"
+            :img="goodsList[0].imgurl"
+            :name="goodsList[0].goodsname"
+            :price="goodsList[0].price"
+          />
+        </ul>
+        <ul class="right">
+          <GoodsItem
+            v-for="(item,index) in goodsList"
+            :style="{marginBottom: index<=2?'10px':'0px'}"
+            :key="+item.id"
+            :id="item.id"
+            :img="item.imgurl"
+            :name="item.goodsname"
+            :price="item.price"
+          />
+        </ul>
+      </div>
+    </section>
+    </el-row>
+   <!-- <section class="newGoods section">
       <SectionHeader title="新品首发" tips="周一周四上新，为你寻觅世间好物" moreText="更多新品>"/>
       <Slick
-        :ulWidth="(266*goodsList.length)+(10*(goodsList.length-1))" 
+        :ulWidth="(266*goodsList.length)+(10*(goodsList.length-1))"
         :showWidth="(266*4)+(10*3)"
         :height="360"
       >
         <ul class="goodsList" :style="{width:`${(266*goodsList.length)+(10*(goodsList.length-1))}px`}" slot="list">
-          <GoodsItem 
-            v-for="(item,index) in goodsList" 
+          <GoodsItem
+            v-for="(item,index) in goodsList"
             :style="{marginRight: (index+1)%4===0?'0px':'10px'}"
             :key="+item.id"
             :id="item.id"
@@ -24,8 +52,8 @@
           />
         </ul>
       </Slick>
-    </section>
-    <section class="flashSale section">
+    </section>-->
+    <!--<section class="flashSale section">
       <SectionHeader title="限时购" tips="抢抢抢，好货不等人" moreText="更多抢购>"/>
       <div class="content">
         <div class="left">
@@ -57,32 +85,9 @@
           </li>
         </ul>
       </div>
-    </section>
-    <section class="hotGoods section">
-      <SectionHeader title="人气推荐" tips="最火最潮商品，为您挑选" moreText="更多推荐>"/>
-      <div class="content">
-        <ul class="left">
-          <GoodsItem 
-            :id="goodsList[0].id"
-            :img="goodsList[0].img"
-            :name="goodsList[0].name"
-            :price="goodsList[0].price"
-          />
-        </ul>
-        <ul class="right">
-           <GoodsItem 
-            v-for="(item,index) in goodsList.slice(3,9)" 
-            :style="{marginBottom: index<=2?'10px':'0px'}"
-            :key="+item.id"
-            :id="item.id"
-            :img="item.img"
-            :name="item.name"
-            :price="item.price"
-          />
-        </ul>
-      </div>
-    </section>
-    <section class="maker section">
+    </section>-->
+
+   <!-- <section class="maker section">
       <SectionHeader title="品牌制造商" tips="工厂直达消费者，剔除品牌溢价" moreText="更多制造商>"/>
       <div class="content">
         <ZoomImg imgSrc="http://yanxuan.nosdn.127.net/0266209ded1751f599fe0dc21bb33e02.jpg" class="left">
@@ -116,12 +121,12 @@
           </ZoomImg>
         </div>
       </div>
-    </section>
-    <section class="typeSection section" v-for="(item,index) in typeList.slice(1)" :key="item.id">
+    </section>-->
+   <!-- <section class="typeSection section" v-for="(item,index) in typeList.slice(1)" :key="item.id">
       <SectionHeader :title="item.name" tips="" moreText="查看更多>" @click.native="selectType(item.id)"/>
       <ul class="content">
-          <GoodsItem 
-            v-for="(item,index) in filterGoodsByType(item.id).slice(0,4)" 
+          <GoodsItem
+            v-for="(item,index) in filterGoodsByType(item.id).slice(0,4)"
             :style="{marginRight: (index+1)%4===0?'0px':'25px'}"
             :key="+item.id"
             :id="item.id"
@@ -130,12 +135,12 @@
             :price="item.price"
           />
       </ul>
-    </section>
+    </section>-->
   </div>
 </template>
 
 <script>
-import {getTypes,getGoodsList} from '../../api/client';
+import {getGoods,getTypes,addType,deleteGoods} from '../../api/admin';
 import SectionHeader from '../../components/SectionHeader';
 import ZoomImg from '../../components/ZoomImg';
 import GoodsItem from '../../components/GoodsItem';
@@ -187,13 +192,20 @@ export default {
       this.navTo('/mall/show/goodsList/'+typeId+'/all');
     },
     getGoodsList(typeId){
-      const res = getGoodsList(typeId);
-      res.then((data)=>{
-        this.goodsList = data;
-      })
-      .catch((e)=>{
-        alert(e);
-      })
+      if(typeId===0){
+        //获取所有
+        const res = getGoods();
+        res
+          .then((goods)=>{
+            this.goodsList = goods.t;
+          })
+          .catch((e)=>{
+            alert(e);
+          })
+      }else{
+        //根据类型获取
+
+      }
     },
     searchTip(tip){
       alert(tip)
@@ -215,22 +227,11 @@ export default {
 
   mounted(){
     //获取数据
-    const res = getTypes();
-    res
-    .then((data)=>{
-      data.unshift({
-        id:-1,
-        name:'首页'
-      });
-      this.typeList = data;
-      this.getGoodsList(-1);
-    })
-    .catch((e)=>{
-      alert(e);
-    });
+    this.getGoodsList(0);
+
 
     //记录打开网页再加四小时的时间
-    this.initTimestamp = new Date().getTime()+(4*60*60*1000);
+    /*this.initTimestamp = new Date().getTime()+(4*60*60*1000);
     this.timer = setInterval(()=>{
       this.newTimestamp = new Date().getTime();
       let diff = parseInt((this.initTimestamp-this.newTimestamp)/1000);
@@ -240,7 +241,7 @@ export default {
       this.m = new String(Math.floor(diff/60)).padStart(2,'0');
       diff = diff%60;
       this.s = new String(diff).padStart(2,'0');
-    },1000);
+    },1000);*/
   },
 
   beforeDestroy(){
@@ -255,18 +256,7 @@ export default {
 @import "../../assets/css/var.less";
 .MallIndex{
   width: 100%;
-  .swiperBox{
-    position: absolute;
-    left: 0;
-    top: 230px;
-    margin-top: 20px;
-    display: block;
-    box-shadow: 0 -1px 2px rgba(0,0,0,0.2);
-    overflow: hidden;
-    .banner{
-      transform: scale(1.2,1);
-    }
-  }
+
   .section{
     padding:30px;
     overflow: hidden;

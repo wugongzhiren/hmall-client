@@ -9,8 +9,8 @@
       </span>
     </div>
     <ul class="result">
-      <GoodsItem 
-        v-for="(item,index) in sortedList" 
+      <GoodsItem
+        v-for="(item,index) in sortedList"
         :style="{marginRight: (index+1)%4===0?'0px':'25px'}"
         :key="+item.id"
         :id="item.id"
@@ -34,7 +34,7 @@ export default {
   },
   computed:{
     isSearchPage(){
-      return Number(this.typeId)===0?true:false;
+      return Number(this.typeId)===-1?true:false;
     },
     typeId(){
       return this.$route.params.typeId || 0;
@@ -94,14 +94,15 @@ export default {
 
   mounted(){
     //类别页
-    if(!this.isSearchPage){
+
+    /*if(!this.isSearchPage){
       this.getGoodsList(this.typeId);
     }
     //搜索结果页
     else{
       this.searchGoods(this.keyword);
-    }
-    
+    }*/
+
   },
 
   watch:{

@@ -1,37 +1,18 @@
 <template>
   <div class="TipsInput tipsEle">
-    <input 
+    <input
       ref="input"
-      type="text" 
-      :placeholder="placeholder" 
+      type="text"
+      :placeholder="placeholder"
       v-model="inputText"
-      class="tipsEle" 
+      class="tipsEle"
     />
-    <ul class="tipsBox tipsEle" v-show="tipsShow">
-      <li 
-        v-for="(item,index) in tips" 
-        :key="index"
-        @click="tipsClickHandle(item)"
-        class="tipsEle" 
-      >
-        {{item}}
-      </li>
-    </ul>
   </div>
 </template>
 
 <script>
 export default {
   name: 'TipsInput',
-  computed:{
-    tipsShow(){
-      if(this.inputText.trim().length>0 && this.inputBoxFocus){
-        return true;
-      }else{
-        return false;
-      }
-    }
-  },
   props:{
     placeholder:{
       type:String,
@@ -55,9 +36,6 @@ export default {
     document.removeEventListener('click',this.documentClickHandle,false)
   },
   methods:{
-    tipsClickHandle(tip){
-      this.$emit('tipsChosen',tip)
-    },
     documentClickHandle(e){
       if(e.target.className.includes('tipsEle')){
         this.inputBoxFocus = true;
