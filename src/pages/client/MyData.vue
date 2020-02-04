@@ -2,20 +2,12 @@
   <div class="MyData">
     <ul>
       <li>
-        <span>用户头像</span>
-        <img :src="headimg" alt="headimg" />
-      </li>
-      <li>
         <span>账号</span>
-        <p>{{email}}</p>
+        <p>{{id}}</p>
       </li>
       <li>
         <span>昵称</span>
         <input type="text" v-model="nickname" />
-      </li>
-      <li>
-        <span>收件人</span>
-        <input type="text" v-model="recipient" />
       </li>
       <li>
         <span>收件地址</span>
@@ -60,16 +52,14 @@ export default {
   data () {
     return {
       id:'',
-      headimg:'',
-      email:'',
       nickname:'',
-      recipient:'',
       address:'',
       phone:'',
       popupShow:false,
       oldPwd:'',
       newPwd:'',
-      confirmPwd:''
+      confirmPwd:'',
+      password:''
     }
   },
 
@@ -79,16 +69,15 @@ export default {
     }),
     updateUserData(){
       const res = updateUserData({
-        id:this.id,
-        nickname:this.nickname,
-        recipient:this.recipient,
+        userid:this.id,
+        username:this.nickname,
         address:this.address,
         phone:this.phone,
       });
       res
       .then(()=>{
         alert('修改成功!');
-        this.setClientName(this.nickname);
+        //this.setClientName(this.userid);
       })
       .catch((e)=>{
         alert(e);
@@ -101,20 +90,27 @@ export default {
       this.popupShow = true;
     },
     updatePwd(){
+      if(this.oldPwd==''||this.newPwd==''||this.confirmPwd==''){
+        alert('请输入密码！');
+        return;
+      }
       if(this.newPwd!==this.confirmPwd){
         alert('两次输入的密码不一致！');
         return;
       }
+      if(this.oldPwd!==this.password){
+        alert('原密码输入错误！');
+        return;
+      }
       const res = updatePwd({
-        id:this.id,
-        oldPwd:this.oldPwd,
-        newPwd:this.newPwd,
-        confirmPwd:this.confirmPwd
+        userid:this.id,
+        pwd:this.newPwd
       });
       res.then(()=>{
         this.oldPwd = '';
         this.newPwd = '';
         this.confirmPwd = '';
+        this.password=this.newPwd;
         this.closePopup();
         alert('修改密码成功!');
       })
@@ -128,13 +124,11 @@ export default {
     const res = getUserData(this.clientToken);
     res
     .then((data)=>{
-      this.id = data.id;
-      this.headimg = data.headimg;
-      this.email = data.email;
-      this.nickname = data.nickname;
-      this.recipient = data.recipient;
-      this.address = data.address;
-      this.phone = data.phone;    
+      this.id = data.t.userid;
+      this.nickname = data.t.username;
+      this.address = data.t.address;
+      this.phone = data.t.phone;
+      this.password=data.t.password;
     })
     .catch((e)=>{
       alert(e)

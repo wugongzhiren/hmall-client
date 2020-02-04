@@ -23,6 +23,7 @@ import Orders from '@/pages/admin/Orders'
 import EditOrders from '@/pages/admin/EditOrders'
 import EditGoods from '@/pages/admin/EditGoods'
 import Messages from '@/pages/admin/Messages'
+import EditTicket from '@/pages/admin/EditTicket'
 Vue.use(Router);
 
 let router = new Router({
@@ -105,6 +106,13 @@ let router = new Router({
           path: 'editUser',
           name: 'EditUser',
           component: EditUser,
+          meta: {
+            requireLogin:true,
+          },
+        }, {
+          path: 'editTicket',
+          name: 'EditTicket',
+          component: EditTicket,
           meta: {
             requireLogin:true,
           },

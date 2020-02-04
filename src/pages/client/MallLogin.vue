@@ -65,7 +65,7 @@ export default {
       res
       .then((data)=>{
         if(data.code==200){
-          this.setClientToken(data.t.username);
+          this.setClientToken(data.t.userid);
           this.$router.push('/');
         }else{
           alert("账号或者密码错误，请重试")
@@ -91,7 +91,7 @@ export default {
           this.curIndex=0;
           alert("注册成功，欢迎登陆!");
         }
-        this.setClientToken(data.t.username);
+        //this.setClientToken(data.t.username);
         this.$router.push('/');
       })
       .catch((e)=>{

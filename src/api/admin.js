@@ -27,7 +27,7 @@ export function login(data){
 
 //获取所有用户信息
 export function getAllUser(){
-	const res = axios.get('/api/admin/allUser');
+	const res = axios.get('/api/user/getUserAll');
 	return new Promise((resolve,reject)=>{
 		res
 		.then((result)=>{

@@ -57,6 +57,60 @@ export function signup(data) {
   });
 }
 
+export function getAllUser(){
+  const res = axios.get('/api/user/getUserAll');
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
+export function getAllTicket(){
+  const res = axios.get('/api/user/getAllTicket');
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
+
+export function deleteTicket(id){
+  const res = axios.get('/api/user/deleteTicket?id='+id);
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
+export function commitTicket(data) {
+
+  //alert(data);
+  var params = new URLSearchParams();
+  params.append('userid', data.userid);
+  params.append('money', data.money);
+  const res=axios.post('/api/goods/addTicket', params) ;
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
 //得到类目
 export function getTypes() {
   const res = axios.get('/api/admin/getType');
@@ -176,7 +230,7 @@ export function askGoodsMsg(data) {
 
 //加入购物车
 export function addOrder(data) {
-  const res = axios.post('/api/mall/addOrder', data);
+  const res = axios.post('/api/goods/addOrder', data);
   return new Promise((resolve, reject) => {
     res
       .then((result) => {
@@ -301,77 +355,56 @@ export function pay(id) {
 
 //获得用户资料
 export function getUserData(token) {
-  const res = axios.get('/api/user/data?token=' + token);
-  return new Promise((resolve, reject) => {
+  const res = axios.get('/api/user/getUserInfo?userid=' + token);
+  return new Promise((resolve,reject)=>{
     res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
+      .then(res => {
+        resolve(res.data);
       })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve(json.data);
-        } else {
-          reject(json.message);
-        }
+      .catch(err => {
+        reject(err.data)
       })
-      .catch((e) => {
-        reject(e.toString())
-      })
-  })
+  });
 }
 
 //更改用户资料
 export function updateUserData(data) {
-  const res = axios.post('/api/user/updateUserData', data);
-  return new Promise((resolve, reject) => {
+  var params = new URLSearchParams();
+  params.append('userid', data.userid);
+  params.append('username', data.username);
+  //params.append('pwd', data.pwd);
+  params.append('address', data.address);
+  params.append('phone', data.phone);
+  const res=axios.post('/api/user/updateUserInfo', params) ;
+  return new Promise((resolve,reject)=>{
     res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
+      .then(res => {
+        resolve(res.data);
       })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve();
-        } else {
-          reject(json.message);
-        }
+      .catch(err => {
+        reject(err.data)
       })
-      .catch((e) => {
-        reject(e.toString())
-      })
-  })
+  });
 }
 
 //更改用户密码
 export function updatePwd(data) {
-  const res = axios.post('/api/user/updatePwd', data);
-  return new Promise((resolve, reject) => {
+  var params = new URLSearchParams();
+  params.append('userid', data.userid);
+ // params.append('username', data.username);
+  params.append('pwd', data.pwd);
+  //params.append('address', data.address);
+  //params.append('phone', data.phone);
+  const res=axios.post('/api/user/updatePassword', params) ;
+  return new Promise((resolve,reject)=>{
     res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
+      .then(res => {
+        resolve(res.data);
       })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve();
-        } else {
-          reject(json.message);
-        }
+      .catch(err => {
+        reject(err.data)
       })
-      .catch((e) => {
-        reject(e.toString())
-      })
-  })
+  });
 }
 
 //结算购物车

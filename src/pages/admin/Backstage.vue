@@ -3,23 +3,16 @@
     <div class="bsLeft">
       <div class="logo">XXXの蛋糕店</div>
       <ul :style="{height:(height-70)+'px'}">
-        <li @click="navTo('/backstage/editUser')" :class="{selected:curPath==='/backstage/editUser'}">用户管理</li>
+        <!--<li @click="navTo('/backstage/editUser')" :class="{selected:curPath==='/backstage/editUser'}">用户管理</li>-->
         <li @click="navTo('/backstage/goods')" :class="{selected:curPath==='/backstage/goods'}">商品管理</li>
         <li @click="navTo('/backstage/orders')" :class="{selected:curPath==='/backstage/orders'}">订单管理</li>
-        <li @click="navTo('/backstage/messages')" :class="{selected:curPath==='/backstage/messages'}">留言管理</li>
-        <li @click="navTo('/backstage/editAdmin')" :class="{selected:curPath==='/backstage/editAdmin'}">修改资料</li>
+        <li @click="navTo('/backstage/editTicket')" :class="{selected:curPath==='/backstage/editTicket'}">优惠券管理</li>
+        <li @click="navTo('/backstage/editAdmin')" :class="{selected:curPath==='/backstage/editAdmin'}">外链和公告栏管理</li>
+        <li @click="navTo('/backstage/editAdmin')" :class="{selected:curPath==='/backstage/editAdmin'}">信息反馈</li>
       </ul>
     </div><div class="bsRight">
       <div class="header">
         <div class="title">后台管理系统</div>
-        <div class="userInfo">
-          当前用户：
-          <span @mouseover="showUserTips" @mouseout="closeUserTips">{{adminName}}</span>
-          <ul class="userTips" @mouseover="showUserTips" @mouseout="closeUserTips" v-show="userTipsShow">
-            <li @click="navTo('/backstage/editAdmin')">修改资料</li>
-            <li @click="logout">退出</li>
-          </ul>
-        </div>
       </div>
       <transition name="router-fade" mode="out-in">
           <router-view :style="{height:(height-70)+'px',overflowY:'scroll',width:'100%',padding:'20px',backgroundColor:'#f6f5fa'}"></router-view>

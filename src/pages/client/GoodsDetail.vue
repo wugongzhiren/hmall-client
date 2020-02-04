@@ -37,6 +37,7 @@
           </div>
           <button class="buyBtn" @click="buy">立即购买</button>
           <button @click="addToCart">加入购物车</button>
+          <button @click="collect">收藏</button>
         </div>
       </div>
       <section class="msgBox leftContainer">
@@ -194,8 +195,24 @@ this.stockNum=data.t.stock;
         alert('请先登录！');
         return;
       }
+      //查询优惠券
+      /*const res = addOrder({
+        userid:this.clientToken,
+        goodsDetailId:this.temSpecId,
+        num:this.num,
+        state:1,
+        amount:this.goodsPrice
+      });
+      res
+        .then(()=>{
+          alert('自动付款成功！请耐心等待包裹派送~')
+        })
+        .catch((e)=>{
+          alert(e);
+        })*/
+
       const res = addOrder({
-        token:this.clientToken,
+        userid:this.clientToken,
         goodsDetailId:this.temSpecId,
         num:this.num,
         state:1,
@@ -210,32 +227,7 @@ this.stockNum=data.t.stock;
       })
     },
 
-    getComment(goodsId){
-      const res = getComment(goodsId);
-      res
-      .then((data)=>{
-        if(Object.keys(data).length<=0){
-          this.rate = '';
-          this.commentList = [];
-          return;
-        }
-        this.rate = data.rate;
-        this.commentList = data.commentList;
-      })
-      .catch((e)=>{
-        alert(e);
-      })
-    },
 
-    getTypeGoodsList(typeId){
-      const res = getGoodsList(typeId);
-      res.then((data)=>{
-        this.goodsList = data;
-      })
-      .catch((e)=>{
-        alert(e);
-      })
-    },
 
   },
   mounted(){
