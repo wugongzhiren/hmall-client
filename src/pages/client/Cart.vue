@@ -1,37 +1,52 @@
 <template>
   <div class="Cart">
     <div v-if="orderList.length>0">
-      <div class="cartTableHeader">
-        <span>商品信息</span>
-        <span>单价</span>
-        <span>数量</span>
-        <span>小计</span>
-        <span>交易操作</span>
-      </div>
-      <ul class="orderList">
-        <li v-for="(item,index) in orderList" :key="'order'+item.id">
+     <el-row>
+        <el-table
+          :data="orderList"
+          stripe
+          style="width: 100%">
+          <el-table-column
+            prop="orderName"
+            label="商品信息"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="orderPrice"
+            label="单价(元)"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="orderNum"
+            label="数量">
+          </el-table-column>
+          <el-table-column
+            prop="orderSumPrice"
+            label="小计(元)">
+          </el-table-column>
+          <el-table-column
+            fixed="right"
+            label="操作"
+            width="100">
+            <template slot-scope="scope">
+              <el-button type="text"  @click="deleteOrder(scope.$index, scope.row)" size="small">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+     </el-row>
+
+     <!-- <ul class="orderList">
+        <li v-for="(item,index) in orderList" :key="item.id">
           <div class="orderDetail">
-            <img :src="item.goods.img" alt="商品图片" />
             <div class="goodsName">
-              <p @click="navTo('/mall/goods/'+item.goods.id)">{{item.goods.name}}</p>
-              <span>{{item.goods.spec}}</span>
+              <p @click="navTo('/mall/goods/'+item.goodsid)">{{item.orderName}}</p>
             </div>
-            <span class="unitPrice">{{'￥'+item.goods.unitPrice}}</span>
-            <span class="num">
-              <NumberInput 
-                @changeHandle="numberChange(item.id)" 
-                :initNum="item.temGoodsNum" 
-                v-model="item.temGoodsNum" 
-                :min="1" 
-                :max="999"
-              />
-            </span>
-            <!-- <input @change="numberChange(item.id)" type="text" v-model="item.temGoodsNum" min="1" class="numInput" /> -->
-            <span class="amount">{{'￥'+item.amount}}</span>
+            <span class="unitPrice">{{'￥'+item.orderPrice}}</span>
+            <span class="amount">{{'￥'+item.orderNum}}</span>
             <button @click="deleteOrder(item.id)">删除</button>
           </div>
         </li>
-      </ul>
+      </ul>-->
       <div class="cartFooter">
         <span>应付金额：</span>
         <span class="total">{{'￥'+totalAmount}}</span>
@@ -44,7 +59,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import {getOrderByState,deleteOrder,settleAccounts} from '../../api/client';
+import {getOrderByState, deleteOrder, settleAccounts, addOrder} from '../../api/client';
 import NumberInput from '../../components/NumberInput';
 
 export default {
@@ -59,7 +74,7 @@ export default {
     totalAmount(){
       let amount = 0;
       this.orderList.map((item,index)=>{
-        amount+=item.amount;
+        amount+=parseInt(item.orderSumPrice);
       })
       return amount;
     }
@@ -75,10 +90,7 @@ export default {
       const res = getOrderByState(state,this.clientToken);
       res
       .then((data)=>{
-        this.orderList=data;
-        this.orderList.map((item,index)=>{
-          item.temGoodsNum = item.goodsNum;
-        })
+        this.orderList=data.t;
       })
       .catch((e)=>{
         alert(e);
@@ -92,16 +104,13 @@ export default {
         }
       })
     },
-    deleteOrder(orderId){
-      const res = deleteOrder(orderId);
+    deleteOrder(index,row){
+      //alert(row.id);
+      const res = deleteOrder(row.id);
       res
       .then(()=>{
         alert('删除订单成功！');
-        this.orderList.map((item,index)=>{
-          if(item.id===orderId){
-            this.orderList.splice(index,1);
-          }
-        })
+        this.getOrderByState('0');
       })
       .catch((e)=>{
         alert(e);
@@ -111,11 +120,12 @@ export default {
       this.$router.push(route);
     },
     settleAccounts(){
+      //查询优惠券
       let cartList = [];
       this.orderList.map((item,index)=>{
         cartList.push({
           id:item.id,
-          goodsNum:item.temGoodsNum,
+
           amount:item.amount
         })
       });
@@ -134,7 +144,7 @@ export default {
   },
 
   mounted(){
-    this.getOrderByState(0);
+    this.getOrderByState('0');
   },
 }
 </script>

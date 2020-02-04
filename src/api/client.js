@@ -94,6 +94,18 @@ export function deleteTicket(id){
       })
   });
 }
+export function getTickets(userid){
+  const res = axios.get('/api/goods/getTickets?userid='+userid);
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
 export function commitTicket(data) {
 
   //alert(data);
@@ -138,30 +150,16 @@ export function getTypes() {
 
 //获得不同类目的商品
 export function getGoodsList(typeId) {
-  if(typeId==='0'){
-    //获取所有的
-  }
-  const res = axios.get('/api/mall/getGoodsByType?typeId=' + typeId);
-  return new Promise((resolve, reject) => {
+  const res = axios.get('/api/goods/getByType?type=' + typeId);
+  return new Promise((resolve,reject)=>{
     res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
+      .then(res => {
+        resolve(res.data);
       })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve(json.data);
-        } else {
-          reject(json.message);
-        }
+      .catch(err => {
+        reject(err.data)
       })
-      .catch((e) => {
-        reject(e.toString())
-      })
-  })
+  });
 }
 
 //获得商品详情页信息
@@ -230,77 +228,54 @@ export function askGoodsMsg(data) {
 
 //加入购物车
 export function addOrder(data) {
-  const res = axios.post('/api/goods/addOrder', data);
-  return new Promise((resolve, reject) => {
+
+  //alert(data);
+  var params = new URLSearchParams();
+  params.append('goodsid', data.goodid);
+  params.append('userid', data.userid);
+  params.append('orderName', data.orderName);
+  params.append('orderNum', data.orderNum);
+  params.append('orderPrice',data.orderPrice);
+  params.append('salePrice',data.salePrice);
+  params.append('status',data.status);
+  const res=axios.post('/api/goods/addOrder', params) ;
+  return new Promise((resolve,reject)=>{
     res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
+      .then(res => {
+        resolve(res.data);
       })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve();
-        } else {
-          reject(json.message);
-        }
+      .catch(err => {
+        reject(err.data)
       })
-      .catch((e) => {
-        reject(e.toString())
-      })
-  })
+  });
 }
 
 //获得用户订单列表
-export function getOrderByState(state, token) {
-  const res = axios.get('/api/mall/getOrderByState?state=' + state + '&token=' + token);
-  return new Promise((resolve, reject) => {
+export function getOrderByState(status, userid) {
+  const res = axios.get('/api/user/getOrderByState?status=' + status + '&userid=' + userid);
+  return new Promise((resolve,reject)=>{
     res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
+      .then(res => {
+        resolve(res.data);
       })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve(json.data);
-        } else {
-          reject(json.message);
-        }
+      .catch(err => {
+        reject(err.data)
       })
-      .catch((e) => {
-        reject(e.toString())
-      })
-  })
+  });
 }
 
 //删除订单
 export function deleteOrder(id) {
-  const res = axios.delete('/api/mall/deleteOrder?id=' + id);
-  return new Promise((resolve, reject) => {
+  const res = axios.get('/api/user/deleteOrder?id=' + id);
+  return new Promise((resolve,reject)=>{
     res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
+      .then(res => {
+        resolve(res.data);
       })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve();
-        } else {
-          reject(json.message);
-        }
+      .catch(err => {
+        reject(err.data)
       })
-      .catch((e) => {
-        reject(e.toString())
-      })
-  })
+  });
 }
 
 //确认收货
@@ -483,26 +458,52 @@ export function getComment(goodsId) {
 }
 
 //关键词搜索商品
-export function searchGoods(keyword = '') {
-  const res = axios.get('/api/mall/searchGoods?keyword=' + keyword);
-  return new Promise((resolve, reject) => {
+export function searchGoods(keyword) {
+  const res = axios.get('/api/goods/getByKeyWord?keyword=' + keyword);
+  return new Promise((resolve,reject)=>{
     res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
+      .then(res => {
+        resolve(res.data);
       })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve(json.data);
-        } else {
-          reject(json.message);
-        }
+      .catch(err => {
+        reject(err.data)
       })
-      .catch((e) => {
-        reject(e.toString())
+  });
+}
+
+//关键词搜索商品
+export function getAds() {
+  const res = axios.get('/api/ads/getAds');
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
       })
-  })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
+
+//关键词搜索商品
+export function addAds(data) {
+  var params = new URLSearchParams();
+  params.append('id', data.id);
+  params.append('tips1', data.tips1);
+  params.append('tips2', data.tips2);
+  params.append('tips3', data.tips3);
+  params.append('img1', data.img1);
+  params.append('img2', data.img2);
+  params.append('img3', data.img3);
+  //params.append('pwd', data.pwd);
+  const res=axios.post('/api/ads/add', params) ;
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
 }

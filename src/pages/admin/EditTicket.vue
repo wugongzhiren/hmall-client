@@ -164,7 +164,15 @@ export default {
           money:this.chooseMoney});
         res
           .then((data)=>{
-
+            this.dialogVisible=false;
+            const res1 = getAllTicket();
+            res1
+              .then((users)=>{
+                this.ticketList = users.t;
+              })
+              .catch((e)=>{
+                alert(e)
+              })
             //this.userlist = users.t;
           })
           .catch((e)=>{

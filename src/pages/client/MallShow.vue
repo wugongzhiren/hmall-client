@@ -58,7 +58,7 @@ export default {
   data () {
     return {
       tips:[],
-      typeList:[{"id":"0","name":"首页"},{"id":"1","name":"经典系列"},{"id":"2","name":"儿童系列"},{"id":"3","name":"尊爱系列"},{"id":"4","name":"奶油系列"}],
+      typeList:[{"id":"0","name":"全部"},{"id":"1","name":"经典系列"},{"id":"2","name":"儿童系列"},{"id":"3","name":"尊爱系列"},{"id":"4","name":"奶油系列"}],
       searchText:'',
       navShouldFixed:false,
     }
@@ -85,7 +85,6 @@ export default {
     },
     selectType(typeId){
       //首页
-      alert(11);
       if(typeId===-1){
         this.navTo('/mall/show/index');
       }else{
@@ -102,7 +101,7 @@ export default {
         alert('输入不能为空！');
         return;
       }
-      this.navTo(`/mall/show/goodsList/0/${this.searchText}`);
+      this.navTo(`/mall/show/goodsList/-1/${this.searchText}`);
     },
     scrollHandle(){
       const top = this.$refs.typeList.getBoundingClientRect().top;

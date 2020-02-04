@@ -14,8 +14,8 @@
         :style="{marginRight: (index+1)%4===0?'0px':'25px'}"
         :key="+item.id"
         :id="item.id"
-        :img="item.img"
-        :name="item.name"
+        :img="item.imgurl"
+        :name="item.goodsname"
         :price="item.price"
       />
       <p class="noGoods" v-if="goodsList.length<=0">抱歉，没有找到相关商品~</p>
@@ -48,11 +48,11 @@ export default {
         return temList;
       }else if(this.sortMode===1){
         return temList.sort((a,b)=>{
-          return a.price - b.price;
+          return parseInt(a.price) - parseInt(b.price);
         })
       }else if(this.sortMode===2){
         return temList.sort((a,b)=>{
-          return b.price - a.price;
+          return parseInt(b.price) - parseInt(a.price);
         })
       }
     }
@@ -68,7 +68,7 @@ export default {
     getGoodsList(typeId){
       const res = getGoodsList(typeId);
       res.then((data)=>{
-        this.goodsList = data;
+        this.goodsList = data.t;
       })
       .catch((e)=>{
         alert(e);
@@ -77,7 +77,7 @@ export default {
     searchGoods(keyword){
       const res = searchGoods(keyword);
       res.then((data)=>{
-        this.goodsList = data;
+        this.goodsList = data.t;
       })
       .catch((e)=>{
         alert(e);
@@ -95,13 +95,13 @@ export default {
   mounted(){
     //类别页
 
-    /*if(!this.isSearchPage){
+    if(!this.isSearchPage){
       this.getGoodsList(this.typeId);
     }
     //搜索结果页
     else{
       this.searchGoods(this.keyword);
-    }*/
+    }
 
   },
 

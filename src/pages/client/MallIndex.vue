@@ -2,9 +2,9 @@
   <div class="MallIndex">
     <el-row>
     <FadeSwiper class="swiperBox" height="420px">
-      <img class="banner" slot="item1" src="http://www.holiland.com/data/afficheimg/1451241729614010049.jpg" />
-      <img class="banner" slot="item2" src="http://www.holiland.com/data/afficheimg/1456986961694221493.jpg" />
-      <img class="banner" slot="item3" src="http://www.holiland.com/data/afficheimg/1464247474728938268.jpg" />
+      <img class="banner" slot="item1" v-bind:src="img1" />
+      <img class="banner" slot="item2" v-bind:src="img2" />
+      <img class="banner" slot="item3" v-bind:src="img3" />
     </FadeSwiper>
     </el-row>
     <el-row>
@@ -148,6 +148,7 @@ import Slick from '../../components/Slick';
 import FadeSwiper from '../../components/FadeSwiper';
 
 import {getClientSize,getScrollWidth} from '../../util/util';
+import {getAds} from "../../api/client";
 
 export default {
   name: 'MallIndex',
@@ -173,6 +174,9 @@ export default {
       h:0,
       m:0,
       s:0,
+      img1:'http://www.holiland.com/data/afficheimg/1451241729614010049.jpg',
+      img2:'http://www.holiland.com/data/afficheimg/1456986961694221493.jpg',
+      img3:'http://www.holiland.com/data/afficheimg/1464247474728938268.jpg'
     }
   },
 
@@ -224,7 +228,27 @@ export default {
       }
     }
   },
-
+  created() {
+    const res = getAds();
+    res
+      .then((data) => {
+        if(data.t.length>0) {
+          this.img1=(data.t[0].img1);
+          this.img2=(data.t[0].img2);
+          this.img3=(data.t[0].img3);
+          //alert( data.t[0].tips1)
+          /* this.tip1 = data.t.tip1;
+           this.tip2 = data.t.tip2;
+           this.tip3 = data.t.tip3;
+           this.img1 = data.t.img1;
+           this.img2 = data.t.img2;
+           this.img3 = data.t.img3;*/
+        }
+      })
+      .catch((e) => {
+        alert(e);
+      })
+  },
   mounted(){
     //获取数据
     this.getGoodsList(0);

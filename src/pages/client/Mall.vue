@@ -104,6 +104,7 @@
 import { mapState,mapMutations } from 'vuex';
 import NoticeList from '../../components/NoticeList';
 import {getClientSize,backToTop} from '../../util/util';
+import {getAds} from "../../api/client";
 
 export default {
   name: 'Mall',
@@ -118,7 +119,7 @@ export default {
   },
   data () {
     return {
-      notices:['新年福利，奶油慕斯蛋糕仅119元！直减60元','【福利】领100元APP新人礼'],
+      notices:[],
       clientHeight:getClientSize().height,
       shouldShowBT:false
     }
@@ -148,8 +149,30 @@ export default {
     }
   },
 
+  created() {
+    const res = getAds();
+    res
+      .then((data) => {
+        if(data.t.length>0) {
+          this.notices.push(data.t[0].tips1);
+          this.notices.push(data.t[0].tips2);
+          this.notices.push(data.t[0].tips3);
+          //alert( data.t[0].tips1)
+          /* this.tip1 = data.t.tip1;
+           this.tip2 = data.t.tip2;
+           this.tip3 = data.t.tip3;
+           this.img1 = data.t.img1;
+           this.img2 = data.t.img2;
+           this.img3 = data.t.img3;*/
+        }
+      })
+      .catch((e) => {
+        alert(e);
+      })
+  },
   mounted(){
     document.addEventListener('scroll',this.watchScrollTop,false);
+
   },
 
   beforeDestroyed(){
