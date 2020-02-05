@@ -7,6 +7,9 @@ import Mall from '@/pages/client/Mall';
 import MallShow from '@/pages/client/MallShow';
 import MallIndex from '@/pages/client/MallIndex';
 import MallLogin from '@/pages/client/MallLogin';
+import MySuggest from '@/pages/client/MySuggest';
+import MyCollects from '@/pages/client/MyCollects';
+import MyTicket from '@/pages/client/MyTicket';
 import GoodsDetail from '@/pages/client/GoodsDetail';
 import GoodsList from '@/pages/client/GoodsList';
 import Personal from '@/pages/client/Personal';
@@ -25,6 +28,7 @@ import EditGoods from '@/pages/admin/EditGoods'
 import Messages from '@/pages/admin/Messages'
 import EditTicket from '@/pages/admin/EditTicket'
 import EditAds from '@/pages/admin/EditAds'
+import Suggest from '@/pages/admin/Suggest'
 Vue.use(Router);
 
 let router = new Router({
@@ -86,10 +90,31 @@ let router = new Router({
               meta: {
                 requireLogin:true,
               },
-            },{
+            }, {
               path: 'myOrder',
               name: 'MyOrder',
               component: MyOrder,
+              meta: {
+                requireLogin: true,
+              },
+            },{
+              path: 'mySuggest',
+              name: 'MySuggest',
+              component: MySuggest,
+              meta: {
+                requireLogin:true,
+              },
+            },{
+              path: 'myCollects',
+              name: 'MyCollects',
+              component: MyCollects,
+              meta: {
+                requireLogin:true,
+              },
+            },{
+              path: 'myTicket',
+              name: 'MyTicket',
+              component: MyTicket,
               meta: {
                 requireLogin:true,
               },
@@ -121,6 +146,13 @@ let router = new Router({
           path: 'editAds',
           name: 'EditAds',
           component: EditAds,
+          meta: {
+            requireLogin:true,
+          },
+        }, {
+          path: 'suggest',
+          name: 'Suggest',
+          component: Suggest,
           meta: {
             requireLogin:true,
           },

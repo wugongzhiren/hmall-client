@@ -3,9 +3,10 @@
     <ul class="titleList">
       <li :class="{selected:curPath==='/mall/personal/cart'}" @click="navTo('/mall/personal/cart')">购物车</li>
       <li :class="{selected:curPath==='/mall/personal/myOrder'}" @click="navTo('/mall/personal/myOrder')">我的订单</li>
-      <li :class="{selected:curPath==='/mall/personal/mySale'}" @click="navTo('/mall/personal/mySale')">我的优惠券</li>
-      <li :class="{selected:curPath==='/mall/personal/myCollect'}" @click="navTo('/mall/personal/myCollect')">我的收藏</li>
+      <li :class="{selected:curPath==='/mall/personal/myTicket'}" @click="navTo('/mall/personal/myTicket')">我的优惠券</li>
+      <li :class="{selected:curPath==='/mall/personal/myCollects'}" @click="navTo('/mall/personal/myCollects')">我的收藏</li>
       <li :class="{selected:curPath==='/mall/personal/myData'}" @click="navTo('/mall/personal/myData')">修改资料</li>
+      <li :class="{selected:curPath==='/mall/personal/mySuggest'}" @click="navTo('/mall/personal/mySuggest')">信息反馈</li>
     </ul>
     <div class="content">
       <router-view></router-view>

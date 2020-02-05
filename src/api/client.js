@@ -94,6 +94,19 @@ export function deleteTicket(id){
       })
   });
 }
+export function deleteTicketByValue(money){
+  const res = axios.get('/api/user/deleteTicketByMoney?money='+money);
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
+
 export function getTickets(userid){
   const res = axios.get('/api/goods/getTickets?userid='+userid);
   return new Promise((resolve,reject)=>{
@@ -122,30 +135,6 @@ export function commitTicket(data) {
         reject(err.data)
       })
   });
-}
-//得到类目
-export function getTypes() {
-  const res = axios.get('/api/admin/getType');
-  return new Promise((resolve, reject) => {
-    res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
-      })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve(json.data);
-        } else {
-          reject(json.message);
-        }
-      })
-      .catch((e) => {
-        reject(e.toString())
-      })
-  })
 }
 
 //获得不同类目的商品
@@ -432,30 +421,6 @@ export function sendComment(data) {
   })
 }
 
-//获得商品评论
-export function getComment(goodsId) {
-  const res = axios.get('/api/mall/getGoodsComment?goodsId=' + goodsId);
-  return new Promise((resolve, reject) => {
-    res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
-      })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve(json.data);
-        } else {
-          reject(json.message);
-        }
-      })
-      .catch((e) => {
-        reject(e.toString())
-      })
-  })
-}
 
 //关键词搜索商品
 export function searchGoods(keyword) {
@@ -497,6 +462,80 @@ export function addAds(data) {
   params.append('img3', data.img3);
   //params.append('pwd', data.pwd);
   const res=axios.post('/api/ads/add', params) ;
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
+
+export function saveSuggest(data) {
+  var params = new URLSearchParams();
+  params.append('userid', data.userid);
+  params.append('content', data.content);
+  //params.append('pwd', data.pwd);
+  const res=axios.post('/api/user/saveSuggest', params) ;
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
+
+export function getSuggests() {
+  const res = axios.get('/api/user/getSuggest');
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
+
+export function saveCollect(data) {
+  var params = new URLSearchParams();
+  params.append('userid', data.userid);
+  params.append('goodid', data.goodid);
+  params.append('flag', data.flag);
+  //params.append('pwd', data.pwd);
+  const res=axios.post('/api/user/saveCollect', params) ;
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
+
+export function getCollects(userid) {
+  const res = axios.get('/api/user/getCollect?userid='+userid);
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
+
+export function getGoodCollects(userid,goodid) {
+  const res = axios.get('/api/user/getgoodCollect?userid='+userid+'&goodid='+goodid);
   return new Promise((resolve,reject)=>{
     res
       .then(res => {

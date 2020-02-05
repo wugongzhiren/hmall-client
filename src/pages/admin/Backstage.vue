@@ -8,7 +8,7 @@
         <li @click="navTo('/backstage/orders')" :class="{selected:curPath==='/backstage/orders'}">订单管理</li>
         <li @click="navTo('/backstage/editTicket')" :class="{selected:curPath==='/backstage/editTicket'}">优惠券管理</li>
         <li @click="navTo('/backstage/editAds')" :class="{selected:curPath==='/backstage/editAds'}">外链和公告栏管理</li>
-        <li @click="navTo('/backstage/editAdmin')" :class="{selected:curPath==='/backstage/editAdmin'}">信息反馈</li>
+        <li @click="navTo('/backstage/suggest')" :class="{selected:curPath==='/backstage/suggest'}">信息反馈</li>
       </ul>
     </div><div class="bsRight">
       <div class="header">

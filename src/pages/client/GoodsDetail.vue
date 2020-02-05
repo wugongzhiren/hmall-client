@@ -18,7 +18,6 @@
             <!-- <Radio v-for="(item,index) in specs" :key="item.id" v-model="temSpecId" :initVal="specs[0].id" radioName="spec" :radioVal="item.id">
 
              </Radio>-->
-
             <span v-if="typeId=='1'" class="tips" slot="tips">经典系列</span>
             <span v-else-if="typeId=='2'" class="tips" slot="tips">儿童系列</span>
             <span v-else-if="typeId=='3'" class="tips" slot="tips">尊爱系列</span>
@@ -35,9 +34,13 @@
             <span>数量：</span>
             <NumberInput v-model="num" :min="1" :max="temStockNum"/>
           </div>
+          <div class="infoBox">
+            <span style="color: red" v-if="ticket!='0'" class="tips" slot="tips">{{'已经选择'+ticket+'元优惠券,立即付款可节省'+ticket+'元'}}</span>
+          </div>
           <button class="buyBtn" @click="buy">立即购买</button>
           <button @click="addToCart">加入购物车</button>
-          <button @click="collect">收藏</button>
+          <button v-if="isCollect" @click="collect('1')">取消收藏</button>
+          <button v-else @click="collect('0')">收藏</button>
         </div>
       </div>
       <section class="msgBox leftContainer">
@@ -67,25 +70,41 @@
     </div>
 
     <el-dialog
-      title="可使用优惠券"
+      title="可使用优惠券(元)"
       :visible.sync="dialogVisible"
       width="30%"
-      :before-close="handleClose">
+      >
       <el-row>
-        分配用户：
         <el-radio-group v-model="ticket" size="medium">
-          <el-radio-button label="上海" v-for="(item,index) in filterList"></el-radio-button>
+          <el-radio
+            v-for="item in ticketList"
+            :key="item.id"
+            :value="item.id"
+            :label="item.money"
+          ></el-radio>
+
         </el-radio-group>
       </el-row>
+      <el-row style="margin: 20px;align-items: center">
       <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="commitTicket">确 定</el-button>
+      <el-button type="primary" @click="buywithTicket">确 定</el-button>
+      </el-row>
     </el-dialog>
   </div>
 </template>
 
 <script>
   import {mapState} from 'vuex';
-  import {getGoodsInfo, getGoodsMsg, askGoodsMsg, addOrder, getTickets, getGoodsList} from '../../api/client';
+  import {
+    getGoodsInfo,
+    saveCollect,
+    getGoodCollects,
+    addOrder,
+    getTickets,
+    deleteTicketByValue,
+    getGoodsList,
+    deleteTicket, getAllTicket
+  } from '../../api/client';
   import NumberInput from '../../components/NumberInput';
   import Radio from '../../components/Radio';
   import GoodsItem from '../../components/GoodsItem';
@@ -114,15 +133,6 @@
         })
         return (this.num*unitPrice);
       },*/
-      temStockNum() {
-        /* let stockNum = 0;
-         this.specs.map((item,index)=>{
-           if(item.id===this.temSpecId){
-             stockNum = Number(item.stockNum);
-           }
-         })*/
-        return Number(this.stock);
-      },
       filterList() {
         return this.goodsList.filter((item) => {
           return String(item.id) !== String(this.id);
@@ -147,9 +157,11 @@
         tagList: ['商品描述'],
         curIndex: 0,
         rate: '',
-        commentList: [],
+        ticketList: [],
         goodsList: [],
         dialogVisible: false,
+        isCollect:false,
+        temStockNum:9999
       }
     },
 
@@ -168,6 +180,7 @@
             //this.specs = data.specs;
             this.typeId = data.t.type;
             this.stockNum = data.t.stock;
+            this.temStockNum=parseInt( this.stockNum);
             this.price = data.t.price;
             this.description = data.t.description;
             //this.getTypeGoodsList(data.typeId);
@@ -229,14 +242,81 @@
               })
           } else {
             this.dialogVisible = true;
+            this.ticketList=data.t;
           }
           // alert('自动付款成功！请耐心等待包裹派送~')
         })
+      },
+      buywithTicket(){
+        //优惠券状态更改
+        const res = deleteTicketByValue(this.ticket);
+        res
+          .then(()=>{
+            const res1 = addOrder({
+              goodid:this.id,
+              userid: this.clientToken,
+              orderName: this.goodsName,
+              orderNum: this.num,
+              orderPrice: this.price,
+              salePrice: this.ticket,
+              status:'1'
+            });
+            res1
+              .then(() => {
+                this.dialogVisible=false;
+                alert('自动付款成功！请耐心等待包裹派送~');
+
+              })
+              .catch((e) => {
+                alert(e);
+              })
+          })
+          .catch((e)=>{
+            alert(e);
+          })
+      },
+      collect(flag){
+        if (!this.clientToken) {
+          alert('请先登录！');
+          return;
+        }
+        const res1 = saveCollect({
+          goodid:this.id,
+          userid: this.clientToken,
+          flag:flag
+        });
+        res1
+          .then(() => {
+            if(flag=='0'){
+              alert('收藏成功！请前往 个人中心->我的收藏 查看')
+            }
+            this.getCollect();
+          })
+          .catch((e) => {
+            alert(e);
+          })
+      },
+      getCollect(){
+        const res1 = getGoodCollects(
+          this.clientToken,this.id
+        );
+        res1
+          .then((data) => {
+            if(data.t!=null){
+              this.isCollect=true;
+            }else{
+              this.isCollect=false;
+            }
+          })
+          .catch((e) => {
+            alert(e);
+          })
       }
     },
       mounted() {
         this.getGoodsInfo(this.id);
-        //this.getGoodsMsg(this.id);
+
+        this.getCollect();
         //this.getComment(this.id);
       },
     }
