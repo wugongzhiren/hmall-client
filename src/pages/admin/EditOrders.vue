@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import {getAOrder,changeOrder} from '../../api/admin';
+import {getAOrder,getAllOrders} from '../../api/client';
 import Radio from '../../components/Radio';
 import NumberInput from '../../components/NumberInput';
 
@@ -116,7 +116,7 @@ export default {
     }
   },
   mounted(){
-    this.fetchOrderDetail(this.$route.params.id);
+
   }
 }
 </script>

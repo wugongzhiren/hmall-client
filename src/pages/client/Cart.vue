@@ -50,16 +50,38 @@
       <div class="cartFooter">
         <span>应付金额：</span>
         <span class="total">{{'￥'+totalAmount}}</span>
-        <button @click="settleAccounts">下单</button>
+        <span style="color: red" v-if="ticket!='0'" class="tips" slot="tips">{{'已经选择'+ticket+'元优惠券,立即下单可节省'+ticket+'元'}}</span>
+        <button @click="settleAccounts">付款结算</button>
       </div>
     </div>
     <p class="emptyTips" v-else>购物车还是空滴~</p>
+    <el-dialog
+      title="可使用优惠券(元)"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <el-row>
+        <el-radio-group v-model="ticket" size="medium">
+          <el-radio
+            v-for="item in ticketList"
+            :key="item.id"
+            :value="item.id"
+            :label="item.money"
+          ></el-radio>
+
+        </el-radio-group>
+      </el-row>
+      <el-row style="margin: 20px;align-items: center">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="buywithTicket">确 定</el-button>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import {getOrderByState, deleteOrder, settleAccounts, addOrder} from '../../api/client';
+import {getOrderByState, deleteOrder, addOrderList, getTickets, deleteTicketByValue} from '../../api/client';
 import NumberInput from '../../components/NumberInput';
 
 export default {
@@ -81,7 +103,10 @@ export default {
   },
   data () {
     return {
+      ticket:'0',
       orderList:[],
+      ticketList:[],
+      dialogVisible:false,
     }
   },
 
@@ -94,14 +119,6 @@ export default {
       })
       .catch((e)=>{
         alert(e);
-      })
-    },
-    numberChange(orderId){
-      this.orderList.map((item,index)=>{
-        if(orderId===item.id){
-          item.amount = item.temGoodsNum*item.goods.unitPrice;
-      console.log(item.temGoodsNum,item.goods.unitPrice)
-        }
       })
     },
     deleteOrder(index,row){
@@ -121,27 +138,54 @@ export default {
     },
     settleAccounts(){
       //查询优惠券
-      let cartList = [];
-      this.orderList.map((item,index)=>{
-        cartList.push({
-          id:item.id,
-
-          amount:item.amount
-        })
-      });
-      const res = settleAccounts({
-        cartList:cartList
-      });
+      const res = getTickets(this.clientToken);
+      res.then((data) => {
+        //alert(data.t.length)
+        if (data.t.length == 0) {
+          //alert(11)
+          const res1 = addOrderList({
+            orderList:this.orderList,
+            userid:this.clientToken,
+            salePrice:this.ticket
+          });
+          res1
+            .then(() => {
+              alert('自动付款成功！请耐心等待包裹派送~')
+            })
+            .catch((e) => {
+              alert(e);
+            })
+        } else {
+          this.dialogVisible = true;
+          this.ticketList = data.t;
+        }
+      })
+    },
+    buywithTicket(){
+      //优惠券状态更改
+      const res = deleteTicketByValue(this.ticket);
       res
-      .then(()=>{
-        alert('下单成功！');
-        this.orderList = [];
-      })
-      .catch((e)=>{
-        alert(e);
-      })
-    }
+        .then(()=>{
+          const res1 = addOrderList({
+            orderList:this.orderList,
+            userid:this.clientToken,
+            salePrice:this.ticket
+          });
+          res1
+            .then(() => {
+              alert('自动付款成功！请耐心等待包裹派送~')
+            })
+            .catch((e) => {
+              alert(e);
+            })
+        })
+        .catch((e)=>{
+          alert(e);
+        })
+
+    },
   },
+
 
   mounted(){
     this.getOrderByState('0');

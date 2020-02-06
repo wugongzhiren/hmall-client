@@ -3,8 +3,8 @@
     <div class="content">
       <h3>MoreMall</h3>
       <P>后台管理系统</P>
-      <input ref="account" type="text" placeholder="账号" />
-      <input ref="pwd" type="password" placeholder="密码" />
+      <input v-model="account" type="text" placeholder="账号" />
+      <input v-model="pwd" type="password" placeholder="密码" />
       <button @click="login">登录</button>
     </div>
   </div>
@@ -27,11 +27,18 @@ export default {
   },
   data () {
     return {
+      account:'',
+      pwd:''
     }
   },
   methods:{
     login(){
-      this.$router.push('/backstage');
+      if(this.account=='admin'&&this.pwd=='admin'){
+        this.$router.push('/backstage');
+      }else{
+        alert('登录失败')
+      }
+
      /* const account = this.$refs.account.value;
       const pwd = this.$refs.pwd.value;
       const res = login({

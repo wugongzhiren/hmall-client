@@ -238,6 +238,25 @@ export function addOrder(data) {
       })
   });
 }
+//购物车结算
+export function addOrderList(data) {
+
+  //alert(data);
+  var params = new URLSearchParams();
+  params.append('orderList', JSON.stringify(data.orderList));
+  params.append('userid', data.userid);
+  params.append('salePrice', data.salePrice);
+  const res=axios.post('/api/goods/addOrderList', params) ;
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
 
 //获得用户订单列表
 export function getOrderByState(status, userid) {
@@ -252,7 +271,42 @@ export function getOrderByState(status, userid) {
       })
   });
 }
-
+export function getAllOrderByState(status) {
+  const res = axios.get('/api/user/getAllOrderByState?status=' + status);
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
+export function getOrders(userid) {
+  const res = axios.get('/api/user/getOrders?userid=' + userid);
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
+export function getAllOrders() {
+  const res = axios.get('/api/user/getAllOrders');
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
 //删除订单
 export function deleteOrder(id) {
   const res = axios.get('/api/user/deleteOrder?id=' + id);
@@ -269,29 +323,29 @@ export function deleteOrder(id) {
 
 //确认收货
 export function confirmReceive(id) {
-  const res = axios.get('/api/mall/confirmReceive?id=' + id);
-  return new Promise((resolve, reject) => {
+  const res = axios.get('/api/user/confirmReceive?id=' + id);
+  return new Promise((resolve,reject)=>{
     res
-      .then((result) => {
-        if (result.status === 200) {
-          return result.data;
-        } else {
-          reject(result.status)
-        }
+      .then(res => {
+        resolve(res.data);
       })
-      .then((json) => {
-        if (json.code === 0) {
-          resolve();
-        } else {
-          reject(json.message);
-        }
+      .catch(err => {
+        reject(err.data)
       })
-      .catch((e) => {
-        reject(e.toString())
-      })
-  })
+  });
 }
-
+export function sendGoods(id) {
+  const res = axios.get('/api/user/sendGoods?id=' + id);
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
 //确认付款
 export function pay(id) {
   const res = axios.get('/api/mall/pay?id=' + id);

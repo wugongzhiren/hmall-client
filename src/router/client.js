@@ -125,7 +125,7 @@ let router = new Router({
     },{
       path: '/backstage',
       name: 'Backstage',
-      redirect:"/backstage/editUser",
+      redirect:"/backstage/goods",
       component: Backstage,
       children: [
         {

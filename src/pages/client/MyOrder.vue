@@ -16,59 +16,35 @@
       <ul class="orderList">
         <li v-for="(item,index) in orderList" :key="'order'+item.id">
           <div class="orderHeader">
-            <span class="orderTime">{{item.createtime}}</span>
+            <span class="orderTime">{{item.creteTime}}</span>
             <span class="orderId">{{'订单号：'+item.id}}</span>
             <span class="state">{{tagList[item.state+1]}}</span>
             <span class="deleteBtn" @click="deleteOrder(item.id)"><i class="iconfont icon-close" /></span>
           </div>
           <div class="orderDetail">
-            <img :src="item.goods.img" alt="商品图片" />
             <div class="goodsName">
-              <p @click="navTo('/mall/goods/'+item.goods.id)">{{item.goods.name}}</p>
-              <span>{{item.goods.spec}}</span>
+              <p @click="navTo('/mall/goods/'+item.goodid)">{{item.orderName}}</p>
             </div>
-            <span class="unitPrice">{{'￥'+item.goods.unitPrice}}</span>
-            <span class="num">{{item.goodsNum}}</span>
-            <span class="amount">{{'￥'+item.amount}}</span>
-            <button v-if="item.state===0" @click="confirmPay(item.id)">确认付款</button>
-            <button v-else-if="item.state===2" @click="confirmReceive(item.id)">确认收货</button>
-            <button v-else-if="item.state===3 && !item.hasComment" @click="showPopup(item.id,item.goods.id,item.goods.goodsDetailId)">评价</button>
-            <span class="hasComment" v-else-if="item.state===3 && item.hasComment">已评价</span>
+            <span class="unitPrice">{{'￥'+item.orderPrice}}</span>
+            <span class="num">{{item.orderNum}}</span>
+            <span class="amount">{{'￥'+item.orderSumPrice}}</span>
+            <button v-if="item.status=='0'" @click="navTo('/mall/personal/cart')">去结算</button>
+            <button v-else-if="item.status=='1'" @click="confirmReceive(item.id)">确认收货</button>
           </div>
         </li>
       </ul>
     </div>
-    <Popup title="商品评价" @popupClose="closePopup" v-show="popupShow">
-      <div class="popupContent" slot="popupContent">
-        <div class="scoreBox">
-          <span class="tips">评分：</span>
-          <i 
-            class="iconfont icon-collection_fill" 
-            v-for="(item,index) in 5"
-            :key="'star'+index"
-            :style="{color:(index+1)<=curStar?'#f9bd4f':'white'}"
-            @mouseover="setCurStar(index+1)"
-            @mouseout="setCurStar(0)"
-            @click="confirmStar(index+1)"
-          />
-        </div>
-        <textarea v-model="comment" cols="30" rows="10" placeholder="请输入评论内容"></textarea>
-        <button @click="sendComment">发表</button>
-      </div>
-    </Popup>
+
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import {getOrderByState,deleteOrder,confirmReceive,pay,sendComment} from '../../api/client';
+import {getOrderByState,deleteOrder,confirmReceive,pay,getOrders} from '../../api/client';
 import Popup from '../../components/Popup';
 
 export default {
   name: 'MyOrder',
-  components:{
-    Popup
-  },
   computed:{
     ...mapState([
       'clientToken'
@@ -79,7 +55,6 @@ export default {
       tagList:['全部订单','待付款','待发货','已发货','已完成'],
       curIndex:0,
       orderList:[],
-      popupShow:false,
       curOrderId:'',
       curCommentGoodsId:'',
       curCommentGoodsDetailId:'',
@@ -92,7 +67,21 @@ export default {
   methods:{
     changeIndex(i){
       this.curIndex = i;
-      this.getOrderByState(this.curIndex-1);
+     // alert( this.curIndex)
+      if(this.curIndex==0){
+        //获取全部订单
+        const res = getOrders(this.clientToken);
+        res
+          .then((data)=>{
+            this.orderList=data.t;
+          })
+          .catch((e)=>{
+            alert(e);
+          })
+      }else{
+        this.getOrderByState(this.curIndex-1);
+      }
+
     },
     navTo(route){
       this.$router.push(route);
@@ -101,7 +90,7 @@ export default {
       const res = getOrderByState(state,this.clientToken);
       res
       .then((data)=>{
-        this.orderList=data
+        this.orderList=data.t;
       })
       .catch((e)=>{
         alert(e);
@@ -153,63 +142,10 @@ export default {
         alert(e);
       })
     },
-
-    closePopup(){
-      this.popupShow = false;
-      this.curCommentGoodsId = '';
-      this.curOrderId = '';
-      this.curCommentGoodsDetailId = '';
-      this.hasClickStar = false;
-      this.curStar = 0;
-      this.comment = '';
-    },
-    showPopup(orderId,goodsId,goodsDetailId){
-      this.curCommentGoodsId = goodsId;
-      this.curOrderId = orderId;
-      this.curCommentGoodsDetailId = goodsDetailId;
-      this.popupShow = true;
-    },
-    sendComment(){
-      if(this.curStar<=0 || this.comment==''){
-        alert('评分和评价不能为空！');
-        return;
-      }
-      const res = sendComment({
-        token:this.clientToken,
-        orderId:this.curOrderId,
-        goodsId:this.curCommentGoodsId,
-        goodsDetailId:this.curCommentGoodsDetailId,
-        content:this.comment,
-        score:this.curStar*20
-      });
-      res
-      .then(()=>{
-        alert('评价成功！');
-        for(let order of this.orderList){
-          if(order.id===this.curOrderId){
-            order.hasComment = true;
-          }
-        }
-        this.closePopup();
-      })
-      .catch((e)=>{
-        alert(e);
-      })
-    },
-    setCurStar(star){
-      if(this.hasClickStar){
-        return;
-      }
-      this.curStar = star;
-    },
-    confirmStar(star){
-      this.curStar = star;
-      this.hasClickStar = true;
-    }
   },
 
   mounted(){
-    this.getOrderByState(-1);
+    this.getOrderByState("1");
   }
 }
 </script>
@@ -221,7 +157,7 @@ export default {
     li{
       text-align: center;
       display: inline-block;
-      font-weight: 550;
+      font-weight: 500;
       font-size: 18px;
       border-bottom: 2px solid @borderColor;
       cursor: pointer;
@@ -297,15 +233,11 @@ export default {
           padding: 10px;
           position: relative;
           overflow: hidden;
-          img{
-            width: 84px;
-            height: 84px;
-            display: inline-block;
-          }
           .goodsName{
             display: inline-block;
             margin-left: 5px;
-            width: 230px;
+            color: red;
+            width: 40%;
             vertical-align: top;
             p{
               cursor: pointer;
@@ -323,10 +255,10 @@ export default {
           .unitPrice,.num,.amount,.hasComment{
             display: inline-block;
             vertical-align: top;
-            width: 15%;
+            width: 14%;
             height: 85px;
-            line-height: 85px;
-            text-align: center;
+
+            line-height: 80px;
           }
           button{
             position: absolute;
@@ -343,46 +275,7 @@ export default {
       }
     }
   }
-  .popupContent{
-    padding: 10px;
-    .scoreBox{
-      width: 100%;
-      height: 50px;
-      position: relative;
-      line-height: 50px;
-      text-align: left;
-      .tips{
-        font-size: 15px;
-        vertical-align: middle;
-        display: inline-block;
-      }
-      i{
-        cursor: pointer;
-        vertical-align: middle;
-        display: inline-block;
-        font-size: 25px;
-        margin-right: 5px;
-        -webkit-text-stroke: 1px #f9bd4f;
-      }
-    }
-    textarea{
-      width: 400px;
-      height: 80px;
-      padding: 5px;
-      border:1px solid @borderColor;
-      display: block;
-      margin-top: 10px;
-    }
-    button{
-      display: block;
-      margin: 10px auto;
-      width: 70px;
-      height: 30px;
-      border-radius: 3px;
-      background-color: #313541;
-      color:white;
-      border: none;
-    }
-  }
+
+
 }
 </style>
