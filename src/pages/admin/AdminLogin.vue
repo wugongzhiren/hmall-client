@@ -1,7 +1,7 @@
 <template>
   <div class="AdminLogin" :style="{width:width+'px',height:height+'px'}">
     <div class="content">
-      <h3>MoreMall</h3>
+      <!--<h1>蛋糕店后台</h1>-->
       <P>后台管理系统</P>
       <input v-model="account" type="text" placeholder="账号" />
       <input v-model="pwd" type="password" placeholder="密码" />
