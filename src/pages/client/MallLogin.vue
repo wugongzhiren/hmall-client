@@ -94,8 +94,6 @@ export default {
           this.curIndex=0;
           alert("注册成功，欢迎登陆!");
         }
-        //this.setClientToken(data.t.username);
-        //this.$router.push('/');
       })
       .catch((e)=>{
         alert('出错了')
