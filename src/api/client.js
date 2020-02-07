@@ -45,6 +45,7 @@ export function signup(data) {
   params.append('username', data.username);
   params.append('pwd', data.pwd);
   params.append('address', data.address);
+  params.append('phone', data.phone);
   const res=axios.post('/api/user/signup', params) ;
   return new Promise((resolve,reject)=>{
     res

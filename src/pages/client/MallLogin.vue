@@ -15,6 +15,7 @@
         <input v-model="userid" type="text" placeholder="请输入邮箱或者手机号" />
         <input v-model="signPwd" type="password" placeholder="请输入密码" />
         <input v-model="signName" type="text" placeholder="请输入收件人姓名" />
+        <input v-model="phone" type="text" placeholder="请输入联系电话" />
         <input v-model="signAddress" type="text" placeholder="请输入收件地址" />
         <button @click="signup">注册</button>
       </div>
@@ -43,7 +44,8 @@ export default {
       userid:"",
       signPwd:"",
       signName:"",
-      signAddress:""
+      signAddress:"",
+      phone:''
     }
   },
   methods:{
@@ -81,7 +83,8 @@ export default {
         userid:this.userid,
         username:this.signName,
         pwd:this.signPwd,
-        address:this.signAddress
+        address:this.signAddress,
+        phone:this.phone
       });
       res
       .then((data)=>{
@@ -92,7 +95,7 @@ export default {
           alert("注册成功，欢迎登陆!");
         }
         //this.setClientToken(data.t.username);
-        this.$router.push('/');
+        //this.$router.push('/');
       })
       .catch((e)=>{
         alert('出错了')
