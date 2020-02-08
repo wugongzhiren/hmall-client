@@ -51,7 +51,7 @@ export default {
   data () {
     return {
       tips:[],
-      typeList:[{"id":"0","name":"全部"},{"id":"1","name":"经典系列"},{"id":"2","name":"儿童系列"},{"id":"3","name":"尊爱系列"},{"id":"4","name":"奶油系列"}],
+      typeList:[{"id":"0","name":"全部"},{"id":"1","name":"经典系列"},{"id":"2","name":"儿童系列"},{"id":"3","name":"奶油系列"},{"id":"4","name":"尊爱系列"}],
       searchText:'',
       navShouldFixed:false,
     }

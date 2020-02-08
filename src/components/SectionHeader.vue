@@ -47,6 +47,7 @@ export default {
       display: inline-block;
       font-size: 28px;
       cursor: pointer;
+      color:@thirdColor;
       &:hover{
         color:@thirdColor;
       }

@@ -62,7 +62,7 @@
       },
       saveChange(){
         if(this.tips1==''||this.tips2==''||this.tips3==''||this.img1==''||this.img2==''||this.img3==''){
-          alert("请输入完整的信息!");
+          this.$message("请输入完整的信息!");
           return;
         }
         const res = addAds({
@@ -91,14 +91,15 @@
       const res = getAds();
       res
         .then((data) => {
+          alert()
           if(data.t.length>0) {
-            this.id = data.t.id;
-            this.tip1 = data.t.tip1;
-            this.tip2 = data.t.tip2;
-            this.tip3 = data.t.tip3;
-            this.img1 = data.t.img1;
-            this.img2 = data.t.img2;
-            this.img3 = data.t.img3;
+            this.id = data.t[0].id;
+            this.tips1 = data.t[0].tips1;
+            this.tips2 = data.t[0].tips2;
+            this.tips3 = data.t[0].tips3;
+            this.img1 = data.t[0].img1;
+            this.img2 = data.t[0].img2;
+            this.img3 = data.t[0].img3;
           }
         })
         .catch((e) => {

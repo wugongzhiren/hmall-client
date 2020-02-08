@@ -26,7 +26,7 @@
     <el-row style="margin-top: 50px">
       <hr >
       <section class="hotGoods section">
-      <SectionHeader title="新品推荐" tips="最新商品为您推荐" moreText="更多推荐>"/>
+      <SectionHeader title="新品推荐" tips="最新商品为您推荐" />
                 <div class="content">
                   <ul class="left">
                     <GoodsItem
