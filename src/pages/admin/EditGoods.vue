@@ -10,9 +10,10 @@
       </div>
       <div class="inputBox">
         <span>选择类目：</span>
-        <el-radio v-model="types" label="1">儿童系列</el-radio>
-        <el-radio v-model="types" label="2">经典系列</el-radio>
+        <el-radio v-model="types" label="1">经典系列</el-radio>
+        <el-radio v-model="types" label="2">儿童系列</el-radio>
         <el-radio v-model="types" label="3">奶油系列</el-radio>
+        <el-radio v-model="types" label="4">尊爱系列</el-radio>
       </div>
       <div class="inputBox">
         <span>图片地址：</span>
@@ -61,20 +62,15 @@
       }
     },
     methods: {
-      /*getTypes(){
-        const res = getTypes();
-        res
-        .then((data)=>{
-          this.types = data;
-        })
-        .catch((e)=>{
-          alert(e)
-        })
-      },*/
+
       back() {
         this.$router.go(-1);
       },
       saveChange() {
+        if(this.goodsName==''||this.types==''||this.goodsImg==''||this.description==''||this.stockNum==''||this.unitPrice==''){
+          this.$message('请输入完整信息');
+          return;
+        }
         if (this.id === 'new') {
           const res = addGoods({
             name: this.goodsName,
@@ -96,7 +92,6 @@
               alert(e);
             })
         } else {
-          alert('更新')
           const res = updateGoods({
             id:this.id,
             name: this.goodsName,

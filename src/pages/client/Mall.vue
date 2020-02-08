@@ -45,7 +45,7 @@
         </ul>
       </div>
     </div>
-   <!-- <div class="bottomInfo">
+    <div class="bottomInfo">
       <div class="container">
         <div class="service footerItem">
           <p class="title">客户服务</p>
@@ -63,16 +63,15 @@
           </div>
         </div>
         <div class="code footerItem">
-          <p class="title">下载APP随心购</p>
-          <img src="../../assets/img/code.png" alt=""/>
-          <span>下载领100元新人礼包</span>
+          <p class="title">手机扫码购买</p>
+          <div id="qrcode"></div>
         </div>
       </div>
-    </div>-->
+    </div>
     <footer>
       <div class="container">
 
-       <!-- <ul class="footerTop">
+    <!--    <ul class="footerTop">
           <li>
             <img src="//yanxuan.nosdn.127.net/e6021a6fcd3ba0af3a10243b7a2fda0d.png" alt="" />
             <span>贴心积分打折</span>
@@ -86,30 +85,31 @@
             <span>食品健康品质保证</span>
           </li>
         </ul>-->
-        <div >
-          <hr>
+        <div class="footerBottom">
+
           <ul>
-            <li>Copyright2010 ©北京市好利来食品有限公司 版权所有</li>
-            <li>京icp备15012142号</li>
-            <li>好利来官方邮箱：info@holiland.com</li>
-            <li>客服电话：400-700-5999</li>
-            <li>注册地址：北京市朝阳区观音堂文化大道甲6号北201室</li>
-            <li>统一社会信用代码：91110105721420005Y</li>
-            <li>食品流通许可证号：XXXXX</li>
+            <li>Copyright2020 ©XXXの蛋糕食品有限公司 版权所有</li>
           </ul>
-          <p>XX公司版权所有 © 1996-2020   食品经营许可证：XXXXXXXXXXXXXXXXX</p>
+          <p>XXX公司版权所有 © 1996-2020   食品经营许可证：XXXXXXXXXXXXXXXXX</p>
+          <ul style="margin-top: 10px">
+
+            <span style="cursor:pointer;" @click="See('https://www.taobao.com')">淘宝网 |</span>
+            <span style="cursor:pointer;" @click="See('https://www.jd.com')">京东商城 |</span>
+            <span style="cursor:pointer;" @click="See('http://www.3songshu.com/')">三只松鼠 |</span>
+            <span style="cursor:pointer;" @click="See('https://baicaowei.tmall.com/')">百草味</span>
+          </ul>
         </div>
       </div>
     </footer>
   </div>
 </template>
-
 <script>
+  const os = require('os');
+  import QRCode  from "qrcodejs2"
 import { mapState,mapMutations } from 'vuex';
 import NoticeList from '../../components/NoticeList';
 import {getClientSize,backToTop} from '../../util/util';
-import {getAds} from "../../api/client";
-
+import {getAds,getIp} from "../../api/client";
 export default {
   name: 'Mall',
   computed:{
@@ -119,7 +119,8 @@ export default {
     ]),
   },
   components:{
-    NoticeList
+    NoticeList,
+    QRCode
   },
   data () {
     return {
@@ -127,6 +128,7 @@ export default {
       clientHeight:getClientSize().height,
       shouldShowBT:false,
       searchText:'',
+      link: 'https://baidu.com'
     }
   },
 
@@ -134,6 +136,9 @@ export default {
     ...mapMutations({
       clientLogout: 'CLIENT_LOGOUT',
     }),
+    See (e) {
+      window.location.href = e
+    },
     searchConfirm(){
       if(this.searchText.trim().length<=0){
         this.$message('输入不能为空！');
@@ -150,6 +155,28 @@ export default {
     },
     backToTop(){
       backToTop();
+    },
+    qrcode() {
+      //this.getIPS();
+      const res =  getIp();
+      res
+        .then((data) => {
+          //alert(data.msg);
+          let that = this;
+          let qrcode = new QRCode('qrcode', {
+            width: 124,
+            height: 124,        // 高度
+            text:  data.msg+":8080",   // 二维码内容
+            // render: 'canvas' ,   // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+            // background: '#f0f',   // 背景色
+            // foreground: '#ff0'    // 前景色
+          })
+        })
+        .catch((e) => {
+          alert(e);
+        });
+
+
     },
     watchScrollTop(){
       let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -178,7 +205,7 @@ export default {
   },
   mounted(){
     document.addEventListener('scroll',this.watchScrollTop,false);
-
+    this.qrcode();
   },
 
   beforeDestroyed(){
@@ -189,6 +216,15 @@ export default {
 
 <style scoped lang="less">
 @import "../../assets/css/var.less";
+#qrcode {
+  display: inline-block;
+  img {
+    width: 132px;
+    height: 132px;
+    background-color: #fff; //设置白色背景色
+    padding: 6px; // 利用padding的特性，挤出白边
+  }
+}
 .TextInput{
   float: right;
   border: 1px solid @borderColor;
@@ -385,12 +421,12 @@ export default {
   }
   footer{
 
-
+    background-color: #87D0E3;
     width: 100%;
     height: 208px;
-    color:#898989;
+    color:white;
     overflow: hidden;
-   /* .footerBottom{
+    .footerBottom{
       margin-top: 30px;
       font-size: 13px;
       text-align: center;
@@ -408,7 +444,7 @@ export default {
       p{
         margin-top: 5px;
       }
-    }*/
+    }
   }
 
 }

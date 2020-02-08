@@ -21,22 +21,7 @@
         </ul>
       </div>
 </el-row>
-      <el-row>
-        <video-player
-          style="width: 800px;height: 400px;margin:0 auto"
-          ref="videoPlayer"
-          class="video-player vjs-custom-skin"
-          :playsinline="true"
-          :options="playerOptions"
-          @play="onPlayerPlay($event)"
-          @pause="onPlayerPause($event)"
-        />
 
-
-        <!--<div v-on:click="playVideo()">
-          <video :src="videoSrc" id="videoPlay" v-show="true" class="video">您的浏览器不支持 video 视屏播放。</video>     //隐藏video标签，因为移动端点击视频播放时会自动弹出
-        </div>-->
-      </el-row>
 
     <el-row style="margin-top: 50px">
       <hr >
@@ -64,6 +49,17 @@
                   </ul>
                 </div>
     </section>
+    </el-row>
+    <el-row>
+      <video-player
+        style="width:1000px;height: 400px;margin:0 auto"
+        ref="videoPlayer"
+        class="video-player vjs-custom-skin"
+        :playsinline="true"
+        :options="playerOptions"
+        @play="onPlayerPlay($event)"
+        @pause="onPlayerPause($event)"
+      />
     </el-row>
 
   </div>
@@ -247,7 +243,7 @@ export default {
 .MallIndex{
   width: 100%;
 
-
+height: 1900px;
   .section{
     padding:30px;
     overflow: hidden;
@@ -458,21 +454,22 @@ export default {
   }
   .hotGoods{
 
-    height: 654px;
+    height: 624px;
     .left{
+      height: 100%;
       width: 394px;
       display: inline-block;
       vertical-align: top;
       .GoodsItem{
         width: 100%;
-        height: 532px;
+        height: 520px;
         background-color: white;
       }
       .GoodsItem /deep/ .imgBox{
         height: 380px;
       }
       .GoodsItem /deep/ .goodsInfo{
-        height: auto;
+        height: 130px;
       }
       .GoodsItem /deep/ .goodsName{
         font-size: 30px;

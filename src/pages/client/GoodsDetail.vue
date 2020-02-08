@@ -20,8 +20,8 @@
              </Radio>-->
             <span v-if="typeId=='1'" class="tips" slot="tips">经典系列</span>
             <span v-else-if="typeId=='2'" class="tips" slot="tips">儿童系列</span>
-            <span v-else-if="typeId=='3'" class="tips" slot="tips">尊爱系列</span>
-            <span v-else-if="typeId=='4'" class="tips" slot="tips">奶油系列</span>
+            <span v-else-if="typeId=='3'" class="tips" slot="tips">奶油系列</span>
+            <span v-else-if="typeId=='4'" class="tips" slot="tips">尊爱系列</span>
           </div>
           <div class="infoBox">
             <span>库存：</span>

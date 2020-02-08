@@ -601,3 +601,16 @@ export function getGoodCollects(userid,goodid) {
       })
   });
 }
+
+export function getIp(){
+  const res = axios.get('/api/ads/getIP');
+  return new Promise((resolve,reject)=>{
+    res
+      .then(res => {
+        resolve(res.data);
+      })
+      .catch(err => {
+        reject(err.data)
+      })
+  });
+}
