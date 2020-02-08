@@ -1,141 +1,71 @@
 <template>
   <div class="MallIndex">
     <el-row>
-    <FadeSwiper class="swiperBox" height="420px">
+    <FadeSwiper class="swiperBox" height="400px">
       <img class="banner" slot="item1" v-bind:src="img1" />
       <img class="banner" slot="item2" v-bind:src="img2" />
       <img class="banner" slot="item3" v-bind:src="img3" />
     </FadeSwiper>
     </el-row>
-    <el-row>
-    <section class="hotGoods section">
-      <SectionHeader title="人气推荐" tips="最火最潮商品，为您挑选" moreText="更多推荐>"/>
-      <div class="content">
-        <ul class="left">
-          <GoodsItem
-            :id="goodsList[0].id"
-            :img="goodsList[0].imgurl"
-            :name="goodsList[0].goodsname"
-            :price="goodsList[0].price"
-          />
-        </ul>
-        <ul class="right">
-          <GoodsItem
-            v-for="(item,index) in goodsList"
-            :style="{marginBottom: index<=2?'10px':'0px'}"
+
+<el-row style="margin-top: 10px">
+      <div style="margin:0 auto">
+        <ul style="margin:0 auto">
+          <TypeItem
+            v-for="(item,index) in typeList"
             :key="+item.id"
             :id="item.id"
-            :img="item.imgurl"
-            :name="item.goodsname"
-            :price="item.price"
+            :img="item.img"
+            :name="item.name"
           />
         </ul>
       </div>
+</el-row>
+      <el-row>
+        <video-player
+          style="width: 800px;height: 400px;margin:0 auto"
+          ref="videoPlayer"
+          class="video-player vjs-custom-skin"
+          :playsinline="true"
+          :options="playerOptions"
+          @play="onPlayerPlay($event)"
+          @pause="onPlayerPause($event)"
+        />
+
+
+        <!--<div v-on:click="playVideo()">
+          <video :src="videoSrc" id="videoPlay" v-show="true" class="video">您的浏览器不支持 video 视屏播放。</video>     //隐藏video标签，因为移动端点击视频播放时会自动弹出
+        </div>-->
+      </el-row>
+
+    <el-row style="margin-top: 50px">
+      <hr >
+      <section class="hotGoods section">
+      <SectionHeader title="新品推荐" tips="最新商品为您推荐" moreText="更多推荐>"/>
+                <div class="content">
+                  <ul class="left">
+                    <GoodsItem
+                      :id="goodsList[0].id"
+                      :img="goodsList[0].imgurl"
+                      :name="goodsList[0].goodsname"
+                      :price="goodsList[0].price"
+                    />
+                  </ul>
+                  <ul class="right">
+                    <GoodsItem
+                      v-for="(item,index) in goodsList"
+                      :style="{marginBottom: index<=2?'10px':'0px'}"
+                      :key="+item.id"
+                      :id="item.id"
+                      :img="item.imgurl"
+                      :name="item.goodsname"
+                      :price="item.price"
+                    />
+                  </ul>
+                </div>
     </section>
     </el-row>
-   <!-- <section class="newGoods section">
-      <SectionHeader title="新品首发" tips="周一周四上新，为你寻觅世间好物" moreText="更多新品>"/>
-      <Slick
-        :ulWidth="(266*goodsList.length)+(10*(goodsList.length-1))"
-        :showWidth="(266*4)+(10*3)"
-        :height="360"
-      >
-        <ul class="goodsList" :style="{width:`${(266*goodsList.length)+(10*(goodsList.length-1))}px`}" slot="list">
-          <GoodsItem
-            v-for="(item,index) in goodsList"
-            :style="{marginRight: (index+1)%4===0?'0px':'10px'}"
-            :key="+item.id"
-            :id="item.id"
-            :img="item.img"
-            :name="item.name"
-            :price="item.price"
-          />
-        </ul>
-      </Slick>
-    </section>-->
-    <!--<section class="flashSale section">
-      <SectionHeader title="限时购" tips="抢抢抢，好货不等人" moreText="更多抢购>"/>
-      <div class="content">
-        <div class="left">
-          <p class="title">特价场</p>
-          <hr/>
-          <p class="tips">距离结束还剩</p>
-          <div class="countBox">
-            <span class="time">{{h}}</span>
-            <span>:</span>
-            <span class="time">{{m}}</span>
-            <span>:</span>
-            <span class="time">{{s}}</span>
-          </div>
-          <div class="allBtn">查看全部 ></div>
-        </div><ul class="right"><li v-for="(item,index) in goodsList.slice(0,4)" :key="item.id">
-            <img class="leftImg" :src="item.img" />
-            <div class="rightBox">
-              <p class="goodsName ellipsis" @click="navTo('/mall/goods/'+item.id)">{{item.name}}</p>
-              <div class="less">
-                <span class="lessBar"></span>
-                <span class="lessNum">还剩86件</span>
-              </div>
-              <div class="price">
-                <span class="nowPrice">限时价¥{{item.price}}</span>
-                <span class="beforePrice">原价¥{{item.price+60}}</span>
-              </div>
-              <div class="buyBtn" @click="navTo('/mall/goods/'+item.id)">立即抢购</div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </section>-->
 
-   <!-- <section class="maker section">
-      <SectionHeader title="品牌制造商" tips="工厂直达消费者，剔除品牌溢价" moreText="更多制造商>"/>
-      <div class="content">
-        <ZoomImg imgSrc="http://yanxuan.nosdn.127.net/0266209ded1751f599fe0dc21bb33e02.jpg" class="left">
-          <div class="makerInfo" slot="otherEle">
-            <p class="large">Adidas制造商</p>
-            <hr/>
-            <p class="small">35元起</p>
-          </div>
-        </ZoomImg>
-        <ZoomImg imgSrc="http://yanxuan.nosdn.127.net/7cd0c8ed77da498090fb67c288ef05be.jpg" class="center">
-          <div class="makerInfo" slot="otherEle">
-            <p class="large">UGG制造商</p>
-            <hr/>
-            <p class="small">129元起</p>
-          </div>
-        </ZoomImg>
-        <div class="right">
-          <ZoomImg imgSrc="http://yanxuan.nosdn.127.net/d824afe357e61fbee097412c5894c6ce.jpg">
-            <div class="makerInfo" slot="otherEle">
-              <p class="large">新秀丽制造商</p>
-              <hr/>
-              <p class="small">49元起</p>
-            </div>
-          </ZoomImg>
-          <ZoomImg imgSrc="http://yanxuan.nosdn.127.net/cf5f4a0d110ca17b9e0a80e6f7e6184b.jpg">
-            <div class="makerInfo" slot="otherEle">
-              <p class="large">MUJI制造商</p>
-              <hr/>
-              <p class="small">12.9元起</p>
-            </div>
-          </ZoomImg>
-        </div>
-      </div>
-    </section>-->
-   <!-- <section class="typeSection section" v-for="(item,index) in typeList.slice(1)" :key="item.id">
-      <SectionHeader :title="item.name" tips="" moreText="查看更多>" @click.native="selectType(item.id)"/>
-      <ul class="content">
-          <GoodsItem
-            v-for="(item,index) in filterGoodsByType(item.id).slice(0,4)"
-            :style="{marginRight: (index+1)%4===0?'0px':'25px'}"
-            :key="+item.id"
-            :id="item.id"
-            :img="item.img"
-            :name="item.name"
-            :price="item.price"
-          />
-      </ul>
-    </section>-->
   </div>
 </template>
 
@@ -144,6 +74,7 @@ import {getGoods,getTypes,addType,deleteGoods} from '../../api/admin';
 import SectionHeader from '../../components/SectionHeader';
 import ZoomImg from '../../components/ZoomImg';
 import GoodsItem from '../../components/GoodsItem';
+import TypeItem from '../../components/TypeItem'
 import Slick from '../../components/Slick';
 import FadeSwiper from '../../components/FadeSwiper';
 
@@ -156,6 +87,7 @@ export default {
     SectionHeader,
     ZoomImg,
     GoodsItem,
+    TypeItem,
     Slick,
     FadeSwiper
   },
@@ -166,7 +98,36 @@ export default {
   },
   data () {
     return {
-      typeList:[],
+      playerOptions: {
+        // playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+        autoplay: true, // 如果true,浏览器准备好时开始回放。
+        muted: false, // 默认情况下将会消除任何音频。
+        loop: false, // 导致视频一结束就重新开始。
+        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+        language: 'zh-CN',
+        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+        sources: [
+          {
+            type: 'video/mp4', // 这里的种类支持很多种：基本视频格式、直播、流媒体等，具体可以参看git网址项目
+            src: 'src/assets/video/ad.mp4' // url地址
+          }
+        ],
+        hls: true,
+       // poster: 'http://pic33.nipic.com/20131007/13639685_123501617185_2.jpg', // 你的封面地址
+        width: document.documentElement.clientWidth, // 播放器宽度
+        notSupportedMessage: '此视频暂无法播放，请稍后再试', // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
+        controlBar: {
+          timeDivider: true,
+          durationDisplay: true,
+          remainingTimeDisplay: false,
+          fullscreenToggle: true // 全屏按钮
+        }
+      },
+      typeList:[{"id":"0","img":"http://holiland.com/images/201702/goods_img/63_G_1487033349882.jpg","name":"全部"},{"id":"1","img":"http://holiland.com/data/afficheimg/1556050944618701139.jpg","name":"经典系列"},
+        {"id":"2","img":"http://holiland.com/data/afficheimg/1556053192285643115.jpg","name":"儿童系列"},{"id":"3","img":"http://holiland.com/data/afficheimg/1562625291693904523.jpg","name":"尊爱系列"},
+        {"id":"4","img":"http://holiland.com/images/201611/goods_img/448_G_1479602127024.jpg","name":"奶油系列"}],
+      videoSrc: 'http://cloud.video.taobao.com//play/u/2455221099/p/1/e/6/t/1/50071310842.mp4',
       goodsList:[],
       initTimestamp:0,
       newTimestamp:0,
@@ -211,13 +172,18 @@ export default {
 
       }
     },
+    playVideo(){
+      var vdo = document.getElementById("videoPlay");
+      vdo.play();
+    },
+
     searchTip(tip){
       alert(tip)
     },
     inputTextChange(text){
     },
     scrollHandle(){
-      const top = this.$refs.typeList.getBoundingClientRect().top;
+      //const top = this.$refs.typeList.getBoundingClientRect().top;
       //还未到顶
       if(top>0){
         this.navShouldFixed=false;
@@ -281,6 +247,7 @@ export default {
 .MallIndex{
   width: 100%;
 
+
   .section{
     padding:30px;
     overflow: hidden;
@@ -295,7 +262,7 @@ export default {
   .flashSale{
     .content{
       border: 1px solid @borderColor;
-      height: 376px;
+      height: 676px;
       position: relative;
       .left{
         vertical-align: top;
@@ -490,7 +457,7 @@ export default {
     }
   }
   .hotGoods{
-    background-color: rgb(244,240,234);
+
     height: 654px;
     .left{
       width: 394px;

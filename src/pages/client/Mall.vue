@@ -4,8 +4,12 @@
       <div class="container clear">
         <span class="title" @click="navTo('/mall')">XXの蛋糕店一站式选购平台</span>
         <NoticeList :notices="notices"/>
+        <i class="iconfont icon-search" @click="searchConfirm"/>
+        <input  class="TextInput" v-model="searchText" placeholder="请输入商品关键字"/>
+
+
         <div class="right" v-if="clientToken">
-          <span class="name">欢迎您，{{clientName}}</span>
+          <span class="name">欢迎您</span>
           <span @click="navTo('/mall/personal')">个人中心</span>
           <span @click="logout">退出登录</span>
         </div>
@@ -22,7 +26,7 @@
       <div class="fixedAd">
        <!-- <img src="../../assets/img/index2.gif" alt="" />-->
         <ul class="fixedList">
-          <li>
+         <!-- <li>
             <i class="iconfont icon-collection_fill" />
             <span>新人有礼</span>
           </li>
@@ -33,7 +37,7 @@
           <li>
             <i class="iconfont icon-fabulous" />
             <span>用户反馈</span>
-          </li>
+          </li>-->
           <li @click="backToTop" v-show="shouldShowBT">
             <i class="iconfont icon-arrows-4-7" />
             <span>回顶部</span>
@@ -41,7 +45,7 @@
         </ul>
       </div>
     </div>
-    <div class="bottomInfo">
+   <!-- <div class="bottomInfo">
       <div class="container">
         <div class="service footerItem">
           <p class="title">客户服务</p>
@@ -64,10 +68,11 @@
           <span>下载领100元新人礼包</span>
         </div>
       </div>
-    </div>
+    </div>-->
     <footer>
       <div class="container">
-        <ul class="footerTop">
+
+       <!-- <ul class="footerTop">
           <li>
             <img src="//yanxuan.nosdn.127.net/e6021a6fcd3ba0af3a10243b7a2fda0d.png" alt="" />
             <span>贴心积分打折</span>
@@ -80,18 +85,17 @@
             <img src="//yanxuan.nosdn.127.net/e72ed4de906bd7ff4fec8fa90f2c63f1.png" alt="" />
             <span>食品健康品质保证</span>
           </li>
-        </ul>
-        <div class="footerBottom">
+        </ul>-->
+        <div >
+          <hr>
           <ul>
-            <li>关于我们</li>
-            <li>帮助中心</li>
-            <li>售后服务</li>
-            <li>配送与验收</li>
-            <li>商务合作</li>
-            <li>企业采购</li>
-            <li>开放平台</li>
-            <li>搜索推荐</li>
-            <li>友情链接</li>
+            <li>Copyright2010 ©北京市好利来食品有限公司 版权所有</li>
+            <li>京icp备15012142号</li>
+            <li>好利来官方邮箱：info@holiland.com</li>
+            <li>客服电话：400-700-5999</li>
+            <li>注册地址：北京市朝阳区观音堂文化大道甲6号北201室</li>
+            <li>统一社会信用代码：91110105721420005Y</li>
+            <li>食品流通许可证号：XXXXX</li>
           </ul>
           <p>XX公司版权所有 © 1996-2020   食品经营许可证：XXXXXXXXXXXXXXXXX</p>
         </div>
@@ -121,7 +125,8 @@ export default {
     return {
       notices:[],
       clientHeight:getClientSize().height,
-      shouldShowBT:false
+      shouldShowBT:false,
+      searchText:'',
     }
   },
 
@@ -129,6 +134,13 @@ export default {
     ...mapMutations({
       clientLogout: 'CLIENT_LOGOUT',
     }),
+    searchConfirm(){
+      if(this.searchText.trim().length<=0){
+        this.$message('输入不能为空！');
+        return;
+      }
+      this.navTo(`/mall/show/goodsList/-1/${this.searchText}`);
+    },
     navTo(route){
       this.$router.push(route)
     },
@@ -157,13 +169,7 @@ export default {
           this.notices.push(data.t[0].tips1);
           this.notices.push(data.t[0].tips2);
           this.notices.push(data.t[0].tips3);
-          //alert( data.t[0].tips1)
-          /* this.tip1 = data.t.tip1;
-           this.tip2 = data.t.tip2;
-           this.tip3 = data.t.tip3;
-           this.img1 = data.t.img1;
-           this.img2 = data.t.img2;
-           this.img3 = data.t.img3;*/
+
         }
       })
       .catch((e) => {
@@ -183,13 +189,32 @@ export default {
 
 <style scoped lang="less">
 @import "../../assets/css/var.less";
+.TextInput{
+  float: right;
+  border: 1px solid @borderColor;
+  padding: 6px 10px;
+  border-radius: 5px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.icon-search{
+  float: right;
+  margin-right: 250px;
+  font-size: 24px;
+  font-weight: bold;
+  color:white;
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+}
 .Mall{
+  height: 1200px;
   width: 100%;
   header{
     width: 100%;
-    background-color: #333333;
+    background-color: #87D0E3;
     height:38px;
-    color:@fontShallowColor;
+    color:white;
     user-select:none;
     z-index: 10000;
     position: absolute;
@@ -238,7 +263,7 @@ export default {
   .fixedAd{
     position: fixed;
     right: 0;
-    top: 108px;
+    top: 608px;
     width: 72px;
     img{
       display: block;
@@ -359,31 +384,13 @@ export default {
     }
   }
   footer{
+
+
     width: 100%;
     height: 208px;
-    background-color: #414141;
-    color:white;
+    color:#898989;
     overflow: hidden;
-    .footerTop{
-      padding: 36px 0;
-      border-bottom: 1px solid #4f4f4f;
-      width: 100%;
-      li{
-        display: inline-block;
-        width: 33%;
-        text-align: center;
-        img{
-          vertical-align: middle;
-        }
-        span{
-          vertical-align: middle;
-          font-size: 18px;
-          margin-left: 10px;
-        }
-      }
-    }
-    .footerBottom{
-      color:@fontDefaultColor;
+   /* .footerBottom{
       margin-top: 30px;
       font-size: 13px;
       text-align: center;
@@ -401,7 +408,8 @@ export default {
       p{
         margin-top: 5px;
       }
-    }
+    }*/
   }
+
 }
 </style>

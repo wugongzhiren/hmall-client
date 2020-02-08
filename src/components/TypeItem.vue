@@ -1,22 +1,21 @@
 <template>
     <li class="GoodsItem">
       <div class="imgBox">
-        <img :src="img" alt="商品图片" @click="navTo('/mall/goods/'+id)"/>
+        <img :src="img" @click="selectType(id)"/>
       </div>
       <div class="goodsInfo">
-        <span class="goodsName ellipsis" @click="navTo('/mall/goods/'+id)">{{name}}</span>
-        <span class="price">{{'¥'+price}}</span>
+        <span class="goodsName ellipsis">{{name}}</span>
       </div>
     </li>
 </template>
 
 <script>
 export default {
-  name: 'GoodsItem',
+  name: 'TypeItem',
   props:{
     id:{
-      type:Number,
-      default:0
+      type:String,
+      default:''
     },
     img:{
       type:String,
@@ -26,19 +25,23 @@ export default {
       type:String,
       default:''
     },
-    price:{
-      type:Number,
-      default:0
-    },
   },
   data(){
     return{
     }
   },
-  methods:{
-    navTo(route){
+  methods: {
+    navTo(route) {
       this.$router.push(route);
     },
+    selectType(typeId) {
+      //首页
+      if (typeId === -1) {
+        this.navTo('/mall/show/index');
+      } else {
+        this.navTo('/mall/show/goodsList/' + typeId + '/all');
+      }
+    }
   }
 }
 </script>
@@ -47,8 +50,8 @@ export default {
 @import "../assets/css/var.less";
 .GoodsItem{
   display: inline-block;
-  width: 266px;
-  height: 360px;
+  width: 238px;
+  height: 200px;
   overflow: hidden;
   &:hover{
     img{
@@ -56,8 +59,9 @@ export default {
     }
   }
   .imgBox{
+    margin-left: 10px;
     width: 100%;
-    height: 266px;
+    height: 136px;
     overflow: hidden;
     img{
       width: 100%;
@@ -67,26 +71,28 @@ export default {
     }
   }
   .goodsInfo{
-    background-color: #87D0E3;
+    margin-left: 10px;
     width: 100%;
-    height: 60px;
+    height: 40px;
+    background: #87D0E3;
     font-size: 14px;
     .goodsName{
-      color: white;
+      margin-left: 10px;
+      padding: 10px;
       display: block;
       text-align: center;
       cursor: pointer;
-      margin-bottom: 10px;
-
+      color: white;
+      font-weight: 600;
       line-height: 20px;
       &:hover{
-        color:@thirdColor;
+
       }
     }
     .price{
       display: block;
       text-align: center;
-      color:red;
+      color:white;
     }
   }
 }

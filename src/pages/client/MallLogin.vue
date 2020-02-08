@@ -1,15 +1,17 @@
 <template>
   <div class="ClientLogin" :style="{width:width+'px',height:height+'px'}">
     <div class="content">
-      <h1>蛋糕店网购平台</h1>
-      <div class="tag">
+     <!-- <h1>蛋糕店网购平台</h1>-->
+      <!--<div class="tag">
         <span @click="setIndex(0)" :class="{selected:curIndex===0}">登录</span>
         <span @click="setIndex(1)" :class="{selected:curIndex===1}">注册</span>
-      </div>
+      </div>-->
       <div class="formBox" v-show="curIndex===0">
+
         <input v-model="userid" type="text" placeholder="账号" />
         <input v-model="signPwd" type="password" placeholder="密码" />
-        <button @click="login">登录</button>
+        <button style="background-color: #87D0E3" @click="login">登录</button>
+        <button style="background-color: #87D0E3" @click="setIndex(1)">注册</button>
       </div>
       <div class="formBox" v-show="curIndex===1">
         <input v-model="userid" type="text" placeholder="请输入邮箱或者手机号" />
@@ -17,7 +19,8 @@
         <input v-model="signName" type="text" placeholder="请输入收件人姓名" />
         <input v-model="phone" type="text" placeholder="请输入联系电话" />
         <input v-model="signAddress" type="text" placeholder="请输入收件地址" />
-        <button @click="signup">注册</button>
+        <button style="background-color: #87D0E3" @click="signup">注册</button>
+        <button style="background-color: #87D0E3" @click="setIndex(0)">返回登陆</button>
       </div>
     </div>
   </div>
@@ -60,6 +63,10 @@ export default {
       this.curIndex = index;
     },
     login(){
+      if(this.userid==''||this.signPwd==''){
+        this.$message('请输入完整信息');
+        return;
+      }
       const res = login({
         userid:this.userid,
         pwd:this.signPwd
@@ -79,6 +86,10 @@ export default {
       })
     },
     signup(){
+      if(this.userid==''||this.signName==''||this.signPwd==''||this.signAddress==''||this.phone==''){
+        this.$message('请输入完整信息')
+        return;
+      }
       const res = signup({
         userid:this.userid,
         username:this.signName,
@@ -89,14 +100,14 @@ export default {
       res
       .then((data)=>{
         if(data.code==201){
-          alert("该用户已经被注册!");
+          this.$message("该用户已经被注册!");
         }else{
           this.curIndex=0;
-          alert("注册成功，欢迎登陆!");
+          this.$message("注册成功，欢迎登陆!");
         }
       })
       .catch((e)=>{
-        alert('出错了')
+        this.$message('出错了')
       })
     }
   }

@@ -16,17 +16,9 @@
       </div>
     </FixedNav>
     <div class="logo">
-      <img src="../../assets/img/index1.gif"/>
-      <div class="searchBox">
-        <TipsInput
-          placeholder="请输入商品关键字"
-          ref="TipsInput"
-          v-model="searchText"
-        />
-        <i class="iconfont icon-search" @click="searchConfirm"/>
-      </div>
+
     </div>
-    <ul ref="typeList" class="typeList">
+    <!--<ul ref="typeList" class="typeList">
       <li
         v-for="(item,index) in typeList"
         :key="'type'+item.id"
@@ -35,7 +27,8 @@
       >
         {{item.name}}
       </li>
-    </ul>
+    </ul>-->
+
     <router-view></router-view>
   </div>
 </template>
@@ -96,13 +89,7 @@ export default {
     },
     searchTextChange(text){
     },
-    searchConfirm(){
-      if(this.searchText.trim().length<=0){
-        alert('输入不能为空！');
-        return;
-      }
-      this.navTo(`/mall/show/goodsList/-1/${this.searchText}`);
-    },
+
     scrollHandle(){
       const top = this.$refs.typeList.getBoundingClientRect().top;
       //还未到顶
