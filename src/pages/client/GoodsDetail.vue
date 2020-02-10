@@ -77,6 +77,7 @@
       <el-row>
         <el-radio-group v-model="ticket" size="medium">
           <el-radio
+            @change="checkTicket(item.id)"
             v-for="item in ticketList"
             :key="item.id"
             :value="item.id"
@@ -161,7 +162,8 @@
         goodsList: [],
         dialogVisible: false,
         isCollect:false,
-        temStockNum:9999
+        temStockNum:9999,
+        ticketID:'',
       }
     },
 
@@ -195,6 +197,10 @@
           alert('请先登录！');
           return;
         }
+        if(this.stockNum=='0'){
+          alert('库存不足，无法加入购物车！');
+          return;
+        }
         const res1 = addOrder({
           goodid:this.id,
           userid: this.clientToken,
@@ -216,6 +222,10 @@
       buy() {
         if (!this.clientToken) {
           alert('请先登录！');
+          return;
+        }
+        if(this.stockNum=='0'){
+          alert('库存不足，无法购买！');
           return;
         }
         //查询优惠券
@@ -247,33 +257,59 @@
           // alert('自动付款成功！请耐心等待包裹派送~')
         })
       },
+      checkTicket(id){
+        this.ticketID=id;
+      },
       buywithTicket(){
         //优惠券状态更改
-        const res = deleteTicketByValue(this.ticket);
-        res
-          .then(()=>{
-            const res1 = addOrder({
-              goodid:this.id,
-              userid: this.clientToken,
-              orderName: this.goodsName,
-              orderNum: this.num,
-              orderPrice: this.price,
-              salePrice: this.ticket,
-              status:'1'
-            });
-            res1
-              .then(() => {
-                this.dialogVisible=false;
-                alert('自动付款成功！请耐心等待包裹派送~');
+        if(this.ticketID==''){
+          const res1 = addOrder({
+            goodid:this.id,
+            userid: this.clientToken,
+            orderName: this.goodsName,
+            orderNum: this.num,
+            orderPrice: this.price,
+            salePrice: this.ticket,
+            status:'1'
+          });
+          res1
+            .then(() => {
+             // this.ticketID='';
+              this.dialogVisible=false;
+              alert('自动付款成功！请耐心等待包裹派送~');
 
-              })
-              .catch((e) => {
-                alert(e);
-              })
-          })
-          .catch((e)=>{
-            alert(e);
-          })
+            })
+            .catch((e) => {
+              alert(e);
+            })
+        }else {
+          const res = deleteTicket(this.ticketID);
+          res
+            .then(() => {
+              const res1 = addOrder({
+                goodid: this.id,
+                userid: this.clientToken,
+                orderName: this.goodsName,
+                orderNum: this.num,
+                orderPrice: this.price,
+                salePrice: this.ticket,
+                status: '1'
+              });
+              res1
+                .then(() => {
+                  this.ticketID = '';
+                  this.dialogVisible = false;
+                  alert('自动付款成功！请耐心等待包裹派送~');
+
+                })
+                .catch((e) => {
+                  alert(e);
+                })
+            })
+            .catch((e) => {
+              alert(e);
+            })
+        }
       },
       collect(flag){
         if (!this.clientToken) {

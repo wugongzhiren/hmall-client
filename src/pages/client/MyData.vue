@@ -121,6 +121,10 @@ export default {
   },
 
   mounted(){
+    if(this.clientToken==null){
+      alert('请登录后查看');
+      return;
+    }
     const res = getUserData(this.clientToken);
     res
     .then((data)=>{

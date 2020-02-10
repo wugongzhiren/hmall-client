@@ -143,8 +143,13 @@ export default {
       if(this.searchText.trim().length<=0){
         this.$message('输入不能为空！');
         return;
+      }else{
+        var text=this.searchText;
+        this.searchText='';
+        this.navTo(`/mall/show/goodsList/-1/${text}`);
+
       }
-      this.navTo(`/mall/show/goodsList/-1/${this.searchText}`);
+
     },
     navTo(route){
       this.$router.push(route)

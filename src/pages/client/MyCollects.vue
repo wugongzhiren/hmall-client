@@ -12,11 +12,11 @@
         </el-table-column>
         <el-table-column
 
-          label="商品名"
-          width="100">
-          <template slot-scope="scope">
-            <a style="color: red" @click="navTo('/mall/goods/'+scope.row.goodid)">{{scope.row.goodName}}</a>
-          </template>
+          label="商品"
+          width="200">
+            <template slot-scope="scope">
+              <img style="width: 120px;height: 120px" :src="scope.row.img" />
+            </template>
         </el-table-column>
         <!--<el-table-column
           :cell-cle
@@ -52,6 +52,10 @@ export default {
   	}
   },
   mounted(){
+    if(this.clientToken==null){
+      alert('请登录后查看');
+      return;
+    }
   	const res = getCollects(this.clientToken);
   	res
   	.then((data)=>{

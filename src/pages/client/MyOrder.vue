@@ -23,7 +23,7 @@
           </div>
           <div class="orderDetail">
             <div class="goodsName">
-              <p @click="navTo('/mall/goods/'+item.goodid)">{{item.orderName}}</p>
+              <p @click="navTo('/mall/goods/'+item.goodid)"><img style="margin-left:10px;width: 120px;height: 120px" :src="item.img"/></p>
             </div>
             <span class="unitPrice">{{'￥'+item.orderPrice}}</span>
             <span class="num">{{item.orderNum}}</span>
@@ -145,6 +145,10 @@ export default {
   },
 
   mounted(){
+    if(this.clientToken==null){
+      alert('请登录后查看');
+      return;
+    }
     this.getOrderByState("1");
   }
 }

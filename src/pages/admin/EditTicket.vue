@@ -2,8 +2,8 @@
   <div class="EditUser">
   	<header class="clear">
   		<span>优惠券管理</span>
-      <div><button @click="addTicket">添加</button></div>
-  		<div><input ref="input" type="text" placeholder="输入搜索用户" /><button @click="searchUser"><i class="iconfont icon-search" /></button></div>
+      <div><el-button  @click="addTicket">添加</el-button></div>
+  		<!--<div><input ref="input" type="text" placeholder="输入搜索用户" /><button @click="searchUser"><i class="iconfont icon-search" /></button></div>-->
   	</header>
 <!--
     <el-table
@@ -36,13 +36,13 @@
     </el-table>-->
     <table className="userTable">
       <thead>
-      <tr><th>用户ID</th><th>优惠券面值</th><th>使用状态</th><th>操作</th></tr>
+      <tr><th>用户ID</th><th>优惠券面值</th><th>剩余数量</th><th>操作</th></tr>
       </thead>
       <tbody>
       <tr v-for="(item,index) in ticketList" :key="'user'+item.userid">
         <td>{{item.userid}}</td>
         <td>{{item.money}}</td>
-        <td>{{item.status}}</td>
+        <td>{{item.counts}}</td>
         <td><button class="delete" @click="deleteTickets(item.id)">删除</button></td>
       </tr>
       </tbody>

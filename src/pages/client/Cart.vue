@@ -7,9 +7,12 @@
           stripe
           style="width: 100%">
           <el-table-column
-            prop="orderName"
+
             label="商品信息"
             width="180">
+            <template slot-scope="scope">
+              <img style="width: 120px;height: 120px" :src="scope.row.img" />
+            </template>
           </el-table-column>
           <el-table-column
             prop="orderPrice"
@@ -67,6 +70,7 @@
             :key="item.id"
             :value="item.id"
             :label="item.money"
+            @change="checkTicket(item.id)"
           ></el-radio>
 
         </el-radio-group>
@@ -81,7 +85,14 @@
 
 <script>
 import { mapState } from 'vuex';
-import {getOrderByState, deleteOrder, addOrderList, getTickets, deleteTicketByValue} from '../../api/client';
+import {
+  getOrderByState,
+  deleteOrder,
+  addOrderList,
+  getTickets,
+  deleteTicketByValue,
+  deleteTicket, addOrder
+} from '../../api/client';
 import NumberInput from '../../components/NumberInput';
 
 export default {
@@ -107,10 +118,14 @@ export default {
       orderList:[],
       ticketList:[],
       dialogVisible:false,
+      ticketID:'',
     }
   },
 
   methods:{
+    checkTicket(id){
+      this.ticketID=id;
+    },
     getOrderByState(state){
       const res = getOrderByState(state,this.clientToken);
       res
@@ -163,31 +178,51 @@ export default {
     },
     buywithTicket(){
       //优惠券状态更改
-      const res = deleteTicketByValue(this.ticket);
-      res
-        .then(()=>{
-          const res1 = addOrderList({
-            orderList:this.orderList,
-            userid:this.clientToken,
-            salePrice:this.ticket
-          });
-          res1
-            .then(() => {
-              alert('自动付款成功！请耐心等待包裹派送~')
-            })
-            .catch((e) => {
-              alert(e);
-            })
-        })
-        .catch((e)=>{
-          alert(e);
-        })
-
+      if(this.ticketID==''){
+        const res1 = addOrderList({
+          orderList: this.orderList,
+          userid: this.clientToken,
+          salePrice: this.ticket
+        });
+        res1
+          .then(() => {
+            alert('自动付款成功！请耐心等待包裹派送~')
+          })
+          .catch((e) => {
+            alert(e);
+          })
+      }else {
+        const res = deleteTicket(this.ticketID);
+        ;
+        res
+          .then(() => {
+            const res1 = addOrderList({
+              orderList: this.orderList,
+              userid: this.clientToken,
+              salePrice: this.ticket
+            });
+            res1
+              .then(() => {
+                alert('自动付款成功！请耐心等待包裹派送~')
+              })
+              .catch((e) => {
+                alert(e);
+              })
+          })
+          .catch((e) => {
+            alert(e);
+          })
+      }
     },
   },
 
 
   mounted(){
+
+    if(this.clientToken==null){
+      alert('请登录后查看');
+      return;
+    }
     this.getOrderByState('0');
   },
 }

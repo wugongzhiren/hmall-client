@@ -46,10 +46,15 @@
         setClientName: 'SET_CLIENT_NAME',
       }),
       saveChange() {
+        if(this.clientToken==null){
+          alert('请先登录');
+          return;
+        }
         if (this.textarea == '') {
           alert('请填写内容');
           return;
         }
+
         const res = saveSuggest({'userid': this.clientToken, 'content': this.textarea});
         res
           .then((data) => {

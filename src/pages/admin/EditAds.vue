@@ -91,7 +91,6 @@
       const res = getAds();
       res
         .then((data) => {
-          alert()
           if(data.t.length>0) {
             this.id = data.t[0].id;
             this.tips1 = data.t[0].tips1;

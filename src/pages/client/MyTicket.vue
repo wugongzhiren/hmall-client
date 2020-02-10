@@ -40,7 +40,10 @@ export default {
   	}
   },
   mounted(){
-
+    if(this.clientToken==null){
+      alert('请登录后查看');
+      return;
+    }
     const res1 = getTickets(this.clientToken);
     res1
       .then((users)=>{

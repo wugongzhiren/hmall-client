@@ -352,7 +352,6 @@ export function addGoods(data){
 //更新商品信息
 export function updateGoods(data){
   const params = new URLSearchParams();
-  alert(data.id);
   params.append('id', data.id);
   params.append('name', data.name);
   params.append('type', data.type);
