@@ -5,13 +5,13 @@
   	</header>
     <table className="userTable">
       <thead>
-      <tr><th>优惠券ID</th><th>优惠券面值（元）</th><th>使用状态</th></tr>
+      <tr><th>优惠券ID</th><th>优惠券面值（元）</th><th>可用数量</th></tr>
       </thead>
       <tbody>
       <tr v-for="(item,index) in ticketList" :key="'user'+item.id">
         <td>{{item.id}}</td>
         <td>{{item.money}}</td>
-        <td>{{item.status}}</td>
+        <td>{{item.counts}}</td>
       </tr>
       </tbody>
     </table>
