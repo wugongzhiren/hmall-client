@@ -26,18 +26,6 @@
       <div class="fixedAd">
        <!-- <img src="../../assets/img/index2.gif" alt="" />-->
         <ul class="fixedList">
-         <!-- <li>
-            <i class="iconfont icon-collection_fill" />
-            <span>新人有礼</span>
-          </li>
-          <li>
-            <i class="iconfont icon-paixing-copy" />
-            <span>热门商品</span>
-          </li>
-          <li>
-            <i class="iconfont icon-fabulous" />
-            <span>用户反馈</span>
-          </li>-->
           <li @click="backToTop" v-show="shouldShowBT">
             <i class="iconfont icon-arrows-4-7" />
             <span>回顶部</span>
