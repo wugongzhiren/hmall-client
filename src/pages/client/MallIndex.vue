@@ -121,8 +121,8 @@ export default {
         }
       },
       typeList:[{"id":"0","img":"http://holiland.com/images/201702/goods_img/63_G_1487033349882.jpg","name":"全部"},{"id":"1","img":"http://holiland.com/data/afficheimg/1556050944618701139.jpg","name":"经典系列"},
-        {"id":"2","img":"http://holiland.com/data/afficheimg/1556053192285643115.jpg","name":"儿童系列"},{"id":"3","img":"http://holiland.com/data/afficheimg/1562625291693904523.jpg","name":"尊爱系列"},
-        {"id":"4","img":"http://holiland.com/images/201611/goods_img/448_G_1479602127024.jpg","name":"奶油系列"}],
+        {"id":"2","img":"http://holiland.com/data/afficheimg/1556053192285643115.jpg","name":"儿童系列"},{"id":"4","img":"http://holiland.com/data/afficheimg/1562625291693904523.jpg","name":"尊爱系列"},
+        {"id":"3","img":"http://holiland.com/images/201611/goods_img/448_G_1479602127024.jpg","name":"奶油系列"}],
       videoSrc: 'http://cloud.video.taobao.com//play/u/2455221099/p/1/e/6/t/1/50071310842.mp4',
       goodsList:[],
       initTimestamp:0,
