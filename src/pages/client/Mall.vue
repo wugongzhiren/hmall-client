@@ -245,7 +245,7 @@ export default {
     height:38px;
     color:white;
     user-select:none;
-    z-index: 10000;
+
     position: absolute;
     left: 0;
     top: 0;

@@ -29,7 +29,7 @@
             <span class="num">{{item.orderNum}}</span>
             <span class="amount">{{'￥'+item.orderSumPrice}}</span>
             <button v-if="item.status=='0'" @click="navTo('/mall/personal/cart')">去结算</button>
-            <button v-else-if="item.status=='1'" @click="confirmReceive(item.id)">确认收货</button>
+            <button v-else-if="item.status=='2'" @click="confirmReceive(item.id)">确认收货</button>
           </div>
         </li>
       </ul>

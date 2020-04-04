@@ -86,7 +86,7 @@ export default {
       res
         .then((data)=>{
           this.changeTag(0);
-          alert('发货成功');
+          this.$message.success('发货成功');
         })
         .catch((e)=>{
           alert(e);

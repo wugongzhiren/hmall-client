@@ -165,7 +165,9 @@ export default {
           });
           res1
             .then(() => {
-              alert('自动付款成功！请耐心等待包裹派送~')
+              this.dialogVisible = false;
+              this.$message.success('自动付款成功！请耐心等待包裹派送~')
+              this.getOrderByState('0');
             })
             .catch((e) => {
               alert(e);
@@ -186,7 +188,9 @@ export default {
         });
         res1
           .then(() => {
-            alert('自动付款成功！请耐心等待包裹派送~')
+            this.dialogVisible = false;
+            this.getOrderByState('0');
+            this.$message.success('自动付款成功！请耐心等待包裹派送~')
           })
           .catch((e) => {
             alert(e);
@@ -203,7 +207,9 @@ export default {
             });
             res1
               .then(() => {
-                alert('自动付款成功！请耐心等待包裹派送~')
+                this.dialogVisible = false;
+                this.getOrderByState('0');
+                this.$message.success('自动付款成功！请耐心等待包裹派送~')
               })
               .catch((e) => {
                 alert(e);

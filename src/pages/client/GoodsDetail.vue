@@ -245,7 +245,7 @@
             });
             res1
               .then(() => {
-                alert('自动付款成功！请耐心等待包裹派送~')
+                this.$message.success('自动付款成功！请耐心等待包裹派送~')
               })
               .catch((e) => {
                 alert(e);
@@ -276,7 +276,7 @@
             .then(() => {
              // this.ticketID='';
               this.dialogVisible=false;
-              alert('自动付款成功！请耐心等待包裹派送~');
+              this.$message.success('自动付款成功！请耐心等待包裹派送~');
 
             })
             .catch((e) => {
@@ -299,7 +299,7 @@
                 .then(() => {
                   this.ticketID = '';
                   this.dialogVisible = false;
-                  alert('自动付款成功！请耐心等待包裹派送~');
+                  this.$message.success('自动付款成功！请耐心等待包裹派送~');
 
                 })
                 .catch((e) => {

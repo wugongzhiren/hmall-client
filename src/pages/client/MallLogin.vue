@@ -64,7 +64,7 @@ export default {
     },
     login(){
       if(this.userid==''||this.signPwd==''){
-        this.$message('请输入完整信息');
+        this.$message.error('请输入完整信息');
         return;
       }
       const res = login({
@@ -77,7 +77,7 @@ export default {
           this.setClientToken(data.t.userid);
           this.$router.push('/');
         }else{
-          alert("账号或者密码错误，请重试")
+          this.$message.error('密码错误！');
         }
 
       })
